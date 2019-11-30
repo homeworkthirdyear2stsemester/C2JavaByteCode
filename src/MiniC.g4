@@ -4,44 +4,47 @@ grammar MiniC;
 @header { 
 package generated;
 }
-program	: decl+			;
-decl		: var_decl		
-		| fun_decl		;
+program : decl+         ;
+decl        : var_decl
+		| fun_decl      ;
 var_decl	:  type_spec IDENT ';' 
 		| type_spec IDENT '=' LITERAL ';'	
 		| type_spec IDENT '[' LITERAL ']' ';'	;
-type_spec	: VOID				
-		| INT				;
+type_spec	: VOID
+		| INT               ;
 fun_decl	: type_spec IDENT '(' params ')' compound_stmt ;
-params		: param (',' param)*		
-		| VOID				
-		|			;
-param		: type_spec IDENT		
-		| type_spec IDENT '[' ']'	;
-stmt		: expr_stmt			
-		| compound_stmt			
-		| if_stmt			
-		| while_stmt			
-		| return_stmt			;
-expr_stmt	: expr ';'			;
-while_stmt	: WHILE '(' expr ')' stmt	;
+params		: param (',' param)*
+		| VOID
+		|           ;
+param       : type_spec IDENT
+		| type_spec IDENT '[' ']'   ;
+stmt    : expr_stmt
+		| compound_stmt
+		| if_stmt
+		| while_stmt
+		| return_stmt
+		| for_stmt;
+expr_stmt   : expr ';'      ;
+while_stmt	: WHILE '(' expr ')' stmt   ;
 compound_stmt: '{' local_decl* stmt* '}'	;
 local_decl	: type_spec IDENT ';'
 		| type_spec IDENT '=' LITERAL ';'	
 		| type_spec IDENT '[' LITERAL ']' ';'	;
-if_stmt		: IF '(' expr ')' stmt		
+if_stmt     : IF '(' expr ')' stmt
 		| IF '(' expr ')' stmt ELSE stmt 		;
-return_stmt	: RETURN ';'			
-		| RETURN expr ';'				;
-expr	:  LITERAL				
-	| '(' expr ')'				 
-	| IDENT				 
+return_stmt : RETURN ';'
+		| RETURN expr ';'           ;
+for_stmt : FOR '(' for_condition ')' compound_stmt       ;
+for_condition: expr ';' expr ';' expr   ;
+expr    :  LITERAL
+	| '(' expr ')'
+	| IDENT
 	| IDENT '[' expr ']'			 
 	| IDENT '(' args ')'			
 	| '-' expr				 
-	| '+' expr				 
-	| '--' expr				 
-	| '++' expr				 
+	| '+' expr
+	| '--' expr
+	| '++' expr
 	| expr '*' expr				 
 	| expr '/' expr				 
 	| expr '%' expr				 
@@ -56,10 +59,11 @@ expr	:  LITERAL
 	| '!' expr					 
 	| expr AND expr				 
 	| expr OR expr				
-	| IDENT '=' expr			
-	| IDENT '[' expr ']' '=' expr		;
-args	: expr (',' expr)*			 
-	|					 ;
+	| IDENT '=' expr
+	| IDENT '[' expr ']' '=' expr   ;
+
+args	: expr (',' expr)*
+	|                    ;
 
 VOID: 'void';
 INT: 'int';
@@ -68,6 +72,7 @@ WHILE: 'while';
 IF: 'if';
 ELSE: 'else';
 RETURN: 'return';
+FOR: 'for';
 OR: 'or';
 AND: 'and';
 LE: '<=';
@@ -82,7 +87,6 @@ IDENT  : [a-zA-Z_]
 
 
 LITERAL:   DecimalConstant     |   OctalConstant     |   HexadecimalConstant     ;
-
 
 DecimalConstant
     :   '0'
@@ -102,5 +106,5 @@ WS  :   (   ' '
         |   '\r'
         |   '\n'
         )+
-	-> channel(HIDDEN)	 
+	-> channel(HIDDEN)
     ;
