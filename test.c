@@ -9,14 +9,8 @@ void main() {
    int a;
    int b = 5;
    int c = 0;
-   a=3;
-   while(b<10) {
-       ++b;
-       if(a or c) {
-           _print(a);
-           a = sum(a, -1);
-           c = sub(b, 2);
-       }
+   for(a = 0; a < b; ++c){
+        a = c + a;
    }
    return;
 }
