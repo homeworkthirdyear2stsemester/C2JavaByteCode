@@ -30,6 +30,7 @@ expr_stmt   : expr ';'      ;
 while_stmt   : WHILE '(' expr ')' stmt   ;
 compound_stmt: '{' local_decl* stmt* '}'   ;
 local_decl   : type_spec IDENT ';'
+      | type_spec IDENT '=' CHAR_SET ';'
       | type_spec IDENT '=' LITERAL ';'
       | type_spec IDENT '[' LITERAL ']' ';'
       | type_spec IDENT '=' LITERAL ';' ;
@@ -42,6 +43,7 @@ for_condition: expr ';' expr ';' expr   ;
 expr    :  LITERAL
    | '(' expr ')'
    | FLOAT_IDENT
+   | CHAR_SET
    | IDENT
    | IDENT '[' expr ']'
    | IDENT '(' args ')'
@@ -93,6 +95,18 @@ IDENT  : [a-zA-Z_]
         |  [0-9]
         )*;
 
+
+CHAR_SET
+   : '\'' AlPHA_CHAR '\''
+   | '\'' '0' .. '9' '\''
+
+   ;
+
+AlPHA_CHAR
+   : 'A' .. 'Z'
+   | 'a' .. 'z'
+
+   ;
 
 FLOAT_IDENT : [0-9]+ '.' + [0-9] ;
 
