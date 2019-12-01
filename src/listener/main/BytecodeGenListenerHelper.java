@@ -45,6 +45,15 @@ public class BytecodeGenListenerHelper {
         return ctx.getChildCount() == 5;
     }
 
+    static boolean isDeclWithArray(Local_declContext ctx) {
+        return ctx.getChildCount() == 6;
+    }
+
+    static boolean isDeclWithArray(MiniCParser.ExprContext ctx) {
+        return ctx.getChildCount() == 6;
+    }
+
+
     static boolean isVoidF(Fun_declContext ctx) {
         // 함수의 리턴 값 형식이 void인지 검
         if (ctx.type_spec().getText().equals("void"))

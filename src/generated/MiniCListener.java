@@ -1,4 +1,4 @@
-// Generated from /Users/jongun/cnu/IntelliJ_Project/compiler5-2/src/MiniC.g4 by ANTLR 4.7.2
+// Generated from D:/Project/Intellij-workspace/C2JavaByteCode/src\MiniC.g4 by ANTLR 4.7.2
  
 package generated;
 
@@ -149,6 +149,26 @@ public interface MiniCListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReturn_stmt(MiniCParser.Return_stmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MiniCParser#for_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterFor_stmt(MiniCParser.For_stmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MiniCParser#for_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitFor_stmt(MiniCParser.For_stmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MiniCParser#for_condition}.
+	 * @param ctx the parse tree
+	 */
+	void enterFor_condition(MiniCParser.For_conditionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MiniCParser#for_condition}.
+	 * @param ctx the parse tree
+	 */
+	void exitFor_condition(MiniCParser.For_conditionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MiniCParser#expr}.
 	 * @param ctx the parse tree

@@ -1,6 +1,5 @@
 grammar MiniC;
 
-
 @header { 
 package generated;
 }
@@ -8,12 +7,13 @@ program : decl+         ;
 decl        : var_decl
       | fun_decl      ;
 var_decl   :  type_spec IDENT ';'
-      | type_spec IDENT '=' LITERAL ';'
-      | type_spec IDENT '[' LITERAL ']' ';'   ;
+         | type_spec IDENT '=' LITERAL ';'
+         | type_spec IDENT '[' LITERAL ']' ';'   ;
 type_spec   : VOID
         | DOUBLE
         | FLOAT
-      | INT               ;
+        | INT
+        | CHAR;
 fun_decl   : type_spec IDENT '(' params ')' compound_stmt ;
 params      : param (',' param)*
       | VOID
@@ -31,7 +31,8 @@ while_stmt   : WHILE '(' expr ')' stmt   ;
 compound_stmt: '{' local_decl* stmt* '}'   ;
 local_decl   : type_spec IDENT ';'
       | type_spec IDENT '=' LITERAL ';'
-      | type_spec IDENT '[' LITERAL ']' ';'   ;
+      | type_spec IDENT '[' LITERAL ']' ';'
+      | type_spec IDENT '=' LITERAL ';' ;
 if_stmt     : IF '(' expr ')' stmt
       | IF '(' expr ')' stmt ELSE stmt       ;
 return_stmt : RETURN ';'
@@ -40,6 +41,7 @@ for_stmt : FOR '(' for_condition ')' compound_stmt       ;
 for_condition: expr ';' expr ';' expr   ;
 expr    :  LITERAL
    | '(' expr ')'
+   | FLOAT_IDENT
    | IDENT
    | IDENT '[' expr ']'
    | IDENT '(' args ')'
@@ -62,13 +64,15 @@ expr    :  LITERAL
    | expr AND expr
    | expr OR expr
    | IDENT '=' expr
-   | IDENT '[' expr ']' '=' expr   ;
+   | IDENT '[' expr ']' '=' expr;
 
 args   : expr (',' expr)*
    |                    ;
 
+
 VOID: 'void';
 INT: 'int';
+CHAR : 'char';
 DOUBLE: 'double';
 FLOAT: 'float';
 
@@ -88,6 +92,9 @@ IDENT  : [a-zA-Z_]
         (   [a-zA-Z_]
         |  [0-9]
         )*;
+
+
+FLOAT_IDENT : [0-9]+ '.' + [0-9] ;
 
 
 LITERAL:   DecimalConstant     |   OctalConstant     |   HexadecimalConstant     ;

@@ -38,7 +38,11 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 		}
 	}
 
-	
+	@Override
+	public void enterExpr_stmt(MiniCParser.Expr_stmtContext ctx) {
+		super.enterExpr_stmt(ctx);
+	}
+
 	// var_decl	: type_spec IDENT ';' | type_spec IDENT '=' LITERAL ';'|type_spec IDENT '[' LITERAL ']' ';'
 	@Override
 	public void enterVar_decl(MiniCParser.Var_declContext ctx) {
@@ -58,7 +62,12 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 	@Override
 	public void enterLocal_decl(MiniCParser.Local_declContext ctx) {			
 		if (isArrayDecl(ctx)) {
-			symbolTable.putLocalVar(getLocalVarName(ctx), Type.INTARRAY);
+			String typeName = ctx.getChild(0).getText();
+			if(typeName.equals("char")){
+				symbolTable.putLocalVar(getLocalVarName(ctx), Type.CHARARRAY);
+			}else if(typeName.equals("int")){
+				symbolTable.putLocalVar(getLocalVarName(ctx), Type.INTARRAY);
+			}
 		}
 		else if (isDeclWithInit(ctx)) {
 			symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.INT, initVal(ctx));	
@@ -215,6 +224,13 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 			String vId = symbolTable.getVarId(ctx);
 			varDecl += makeTabs()+"ldc " + ctx.LITERAL().getText() + "\n"
 					+ makeTabs()+"istore_" + vId + "\n";
+		}else if(isDeclWithArray(ctx)){
+			String vId = symbolTable.getVarId(ctx);
+			String arraySize = ctx.getChild(3).getText();
+			String varType = ctx.getChild(0).getText();
+			varDecl += makeTabs() + "bipush " + arraySize + '\n'
+					+ makeTabs() + "newarray " + varType + '\n'
+					+ makeTabs() + "astore " + vId + '\n';
 		}
 		newTexts.put(ctx, varDecl);
 	}
@@ -330,7 +346,16 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 			if(ctx.args() != null){		// function calls
 				expr = handleFunCall(ctx, expr);
 			} else { // expr
-				// Arrays: TODO  
+				// Arrays: TODO
+
+			}
+		}
+		else if(isDeclWithArray(ctx)){
+			String varName = ctx.getChild(0).getText();
+			if(symbolTable.getVarType(varName) == Type.INTARRAY){
+
+			}else if(symbolTable.getVarType(varName) == Type.CHARARRAY){
+
 			}
 		}
 		// IDENT '[' expr ']' '=' expr
@@ -338,7 +363,6 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 		}
 		newTexts.put(ctx, expr);
 	}
-
 
 	private String handleUnaryExpr(MiniCParser.ExprContext ctx, String expr) {
 		String l1 = symbolTable.newLabel();

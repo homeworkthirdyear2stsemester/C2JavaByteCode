@@ -15,7 +15,7 @@ import static listener.main.BytecodeGenListenerHelper.*;
 
 public class SymbolTable {
 	enum Type {
-		INT, INTARRAY, VOID, ERROR
+		INT, INTARRAY, VOID, ERROR, CHARARRAY
 	}
 	
 	static public class VarInfo {
@@ -48,7 +48,7 @@ public class SymbolTable {
 	private int _localVarID = 0;
 	private int _labelID = 0;
 	private int _tempVarID = 0;
-	
+
 	SymbolTable(){
 		_lsymtable.clear();
 		initFunDecl();
