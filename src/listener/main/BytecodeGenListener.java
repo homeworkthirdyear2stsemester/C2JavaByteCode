@@ -357,7 +357,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 				if(varType == Type.INTARRAY){
 					load = "iaload";
 				}else if(varType == Type.CHARARRAY){
-					
+					load = "caload";
 				}
 				expr += tabs + "aload " + varId + '\n'
 						+ tabs + "bipush " + index + '\n'
@@ -365,7 +365,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 			}
 		}
 		else if(isDeclWithArray(ctx)){
-			// a[0] = 10 과 같은 할당 처리
+			// a[0] = 10 과 같은것 처리
 			String varName = ctx.getChild(0).getText();
 			if(symbolTable.getVarType(varName) == Type.INTARRAY){
 				String index = ctx.expr(0).getText();
@@ -377,7 +377,14 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 						+ tabs + "bipush " + value + '\n'
 						+ tabs + "iastore \n";
 			}else if(symbolTable.getVarType(varName) == Type.CHARARRAY){
-
+				String index = ctx.expr(0).getText();
+				int value = (int)ctx.expr(1).getText().charAt(1);
+				String varId = symbolTable.getVarId(varName);
+				String tabs=makeTabs();
+				expr += tabs + "aload " + varId + '\n'
+						+ tabs + "bipush " + index + '\n'
+						+ tabs + "bipush " + value + '\n'
+						+ tabs + "iastore \n";
 			}
 		}
 		// IDENT '[' expr ']' '=' expr
