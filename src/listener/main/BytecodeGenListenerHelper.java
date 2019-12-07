@@ -62,7 +62,7 @@ public class BytecodeGenListenerHelper {
     }
 
     static boolean isIntReturn(MiniCParser.Return_stmtContext ctx) {
-        return ctx.getChildCount() == 3;
+        return ctx.getChildCount() == 3; // int type 확인 코드 추가하기
     }
 
     static boolean isVoidReturn(MiniCParser.Return_stmtContext ctx) {
