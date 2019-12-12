@@ -120,7 +120,7 @@ AlPHA_CHAR
    | '\uFDF0' .. '\uFFFD'
    ;
 
-FLOAT_IDENT : [0-9]+ '.' + [0-9] ;
+FLOAT_IDENT : [0-9]+'.'[0-9]+ ;
 
 
 LITERAL:   DecimalConstant     |   OctalConstant     |   HexadecimalConstant     ;
