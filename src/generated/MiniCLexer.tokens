@@ -36,11 +36,11 @@ NE=35
 IDENT=36
 CHAR_SET=37
 AlPHA_CHAR=38
-FLOAT_IDENT=39
-LITERAL=40
-DecimalConstant=41
-OctalConstant=42
-HexadecimalConstant=43
+LITERAL=39
+DecimalConstant=40
+OctalConstant=41
+HexadecimalConstant=42
+FLOAT_IDENT=43
 WS=44
 ';'=1
 '='=2
