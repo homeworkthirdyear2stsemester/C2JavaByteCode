@@ -490,13 +490,23 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                 break;
             case "--":
                 expr += tabs + "ldc 1" + "\n"
-                        + tabs + "isub" + "\n"
-                        + tabs + "istore_" + symbolTable.getVarId(id) + "\n"; // bug fix, 연산 값 다시 저장 필요함
+                        + tabs + "isub" + "\n";
+                // 글로벌인지 확인
+                if(symbolTable.getVarId(id).charAt(0) == className){
+                    expr += tabs + "putstatic " + symbolTable.getVarId(id) + "\n"; // bug fix, 연산 값 다시 저장 필요함
+                }else{
+                    expr += tabs + "istore_" + symbolTable.getVarId(id) + "\n"; // bug fix, 연산 값 다시 저장 필요함
+                }
                 break;
             case "++":
                 expr += tabs + "ldc 1" + "\n"
-                        + tabs + "iadd" + "\n"
-                        + tabs + "istore_" + symbolTable.getVarId(id) + "\n"; // bug fix, 연산 값 다시 저장 필요함
+                        + tabs + "iadd" + "\n";
+                // 글로벌인지 확인
+                if(symbolTable.getVarId(id).charAt(0) == className){
+                    expr += tabs + "putstatic " + symbolTable.getVarId(id) + "\n"; // bug fix, 연산 값 다시 저장 필요함
+                }else{
+                    expr += tabs + "istore_" + symbolTable.getVarId(id) + "\n"; // bug fix, 연산 값 다시 저장 필요함
+                }
                 break;
             case "!":
                 expr += tabs + "ifeq " + l2 + "\n"
