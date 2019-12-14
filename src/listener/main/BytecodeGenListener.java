@@ -67,14 +67,14 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             else if (typeName.equals("int"))
                 symbolTable.putLocalVar(getLocalVarName(ctx), Type.INTARRAY);
         } else if (isDeclWithInit(ctx)) {
-            if(typeName.equals("char"))
+            if (typeName.equals("char"))
                 symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.CHAR, initVal(ctx));
-            else if(typeName.equals("int"))
+            else if (typeName.equals("int"))
                 symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.INT, initVal(ctx));
         } else { // simple decl
-            if(typeName.equals("char"))
+            if (typeName.equals("char"))
                 symbolTable.putLocalVar(getLocalVarName(ctx), Type.CHAR);
-            else if(typeName.equals("int"))
+            else if (typeName.equals("int"))
                 symbolTable.putLocalVar(getLocalVarName(ctx), Type.INT);
         }
     }
@@ -124,6 +124,9 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                 stmt += newTexts.get(ctx.while_stmt());
             else if (ctx.return_stmt() != null)        // return_stmt
                 stmt += newTexts.get(ctx.return_stmt());
+            else if (ctx.for_stmt() != null) {
+                stmt += newTexts.get(ctx.for_stmt());
+            }
         }
         newTexts.put(ctx, stmt);
     }
@@ -304,7 +307,37 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 
     @Override
     public void exitFor_stmt(MiniCParser.For_stmtContext ctx) {
+        String forStmt = "";
+        MiniCParser.For_conditionContext forConditionContext = ctx.for_condition();
+        // 초기값 설정
+        String assignment = newTexts.get(forConditionContext.expr(0));
+        // 조건 부분
+        String condExpr = newTexts.get(forConditionContext.expr(1));
+        // 괄호 안 내용
+        String lastExpr = newTexts.get(forConditionContext.expr(2));
 
+        String stmt = newTexts.get(ctx.compound_stmt());
+
+
+        // while에서 쓸 라벨 두가지 생성 및 저장
+        String lloop = symbolTable.newLabel();
+        String lend = symbolTable.newLabel();
+
+        // 탭 생성
+        String tabs = makeTabs();
+
+        // 조건을 체크하여 그 조건의 결과값으로 분기하여 stmt부분 반복시킬지, 빠져나올지 결정
+        forStmt += assignment
+                + tabs + lloop + ":" + "\n"
+                + condExpr
+                + tabs + "ifeq " + lend + "\n"
+                + stmt
+                + lastExpr
+                + tabs + "goto " + lloop + "\n"
+                + tabs + lend + ":" + "\n";
+
+        // while부분 변환한 내용 저장
+        newTexts.put(ctx, forStmt);
     }
 
 
@@ -538,15 +571,15 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
     private String handleFunCall(MiniCParser.ExprContext ctx, String expr) {
         String fname = getFunName(ctx);
         if (fname.equals("_print")) { // System.out.println
-            String arg=ctx.args().expr(0).getText();
-            if(symbolTable.getVarType(arg) == Type.CHAR){
-                arg="(C)";
+            String arg = ctx.args().expr(0).getText();
+            if (symbolTable.getVarType(arg) == Type.CHAR) {
+                arg = "(C)";
             } else {
-                arg="(I)";
+                arg = "(I)";
             }
             expr = makeTabs() + "getstatic java/lang/System/out Ljava/io/PrintStream;" + "\n"
                     + newTexts.get(ctx.args())
-                    + makeTabs() + "invokevirtual " + symbolTable.getFunSpecStr("_print")+ arg +"V"+ "\n";
+                    + makeTabs() + "invokevirtual " + symbolTable.getFunSpecStr("_print") + arg + "V" + "\n";
         } else {
             expr = newTexts.get(ctx.args())
                     + makeTabs() + "invokestatic " + getCurrentClassName() + "/" + symbolTable.getFunSpecStr(fname) + "\n";
