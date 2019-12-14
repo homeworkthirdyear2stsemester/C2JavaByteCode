@@ -310,11 +310,25 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         String forStmt = "";
         MiniCParser.For_conditionContext forConditionContext = ctx.for_condition();
         // 초기값 설정
-        String assignment = newTexts.get(forConditionContext.expr(0));
+        String assignment = "";
         // 조건 부분
-        String condExpr = newTexts.get(forConditionContext.expr(1));
+        String condExpr = "";
         // 괄호 안 내용
-        String lastExpr = newTexts.get(forConditionContext.expr(2));
+        String lastExpr = "";
+        int countSemiClone = 0;
+        for (int index = 0; index < forConditionContext.getChildCount(); index++) {
+            if (!forConditionContext.getChild(index).getText().equals(";")) {
+                if (countSemiClone == 0) {
+                    assignment = newTexts.get(forConditionContext.getChild(index));
+                } else if (countSemiClone == 1) {
+                    condExpr = newTexts.get(forConditionContext.getChild(index));
+                } else {
+                    lastExpr = newTexts.get(forConditionContext.getChild(index));
+                }
+            } else {
+                countSemiClone++;
+            }
+        }
 
         String stmt = newTexts.get(ctx.compound_stmt());
 

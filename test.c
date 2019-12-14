@@ -1,7 +1,7 @@
 void main() {
-    char a;
-    int b=1;
-    a = 'c';
-    _print(b);
+    int i = 0;
+    for(;i < 10;){
+        ++i;
+    }
    return;
 }
