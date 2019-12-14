@@ -1,4 +1,4 @@
-// Generated from D:/Project/Intellij-workspace/C2JavaByteCode/src\MiniC.g4 by ANTLR 4.7.2
+// Generated from /Users/jongun/cnu/IntelliJ_Project/C2JavaByteCode/src/MiniC.g4 by ANTLR 4.7.2
  
 package generated;
 
