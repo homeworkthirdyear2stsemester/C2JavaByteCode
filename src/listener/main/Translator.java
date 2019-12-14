@@ -8,11 +8,11 @@ import generated.*;
 
 public class Translator {
 	enum OPTIONS {
-		PRETTYPRINT, BYTECODEGEN, UCODEGEN, ERROR
+		PRETTYPRINT, BYTECODEGE
+			return OPTIONS.BYTECODN, UCODEGEN, ERROR
 	}
 	private static OPTIONS getOption(String[] args){
-		if (args.length < 1)
-			return OPTIONS.BYTECODEGEN;
+		if (args.length < 1)EGEN;
 		if (args[0].startsWith("-p") 
 				|| args[0].startsWith("-P"))
 			return OPTIONS.PRETTYPRINT;
