@@ -92,6 +92,8 @@ public class BytecodeGenListenerHelper {
         if(getFunName(ctx).equals("main")){
             localVarSize++;
         }
+        int params=ctx.params().getChildCount()/2+1;
+        localVarSize+=params;
         ArrayList compoundStmt= (ArrayList) ctx.compound_stmt().children;
         for(int i=0; i<compoundStmt.size(); i++){
             if(compoundStmt.get(i) instanceof Local_declContext)
