@@ -319,6 +319,10 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             } else if (ctx.LITERAL() != null) {
                 String literalStr = ctx.LITERAL().getText();
                 expr += makeTabs() + "ldc " + literalStr + " \n";
+            } else if (ctx.CHAR_SET()!=null){
+                String charStr = ctx.CHAR_SET().getText();
+                int char2int=charStr.charAt(1);
+                expr += makeTabs() + "ldc " + char2int + " \n";
             }
         } else if (ctx.getChildCount() == 2) { // UnaryOperation
 //			expr = handleUnaryExpr(ctx, newTexts.get(ctx) + expr);
