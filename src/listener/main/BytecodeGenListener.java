@@ -60,17 +60,22 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 
     @Override
     public void enterLocal_decl(MiniCParser.Local_declContext ctx) {
+        String typeName = ctx.getChild(0).getText();
         if (isArrayDecl(ctx)) {
-            String typeName = ctx.getChild(0).getText();
-            if (typeName.equals("char")) {
+            if (typeName.equals("char"))
                 symbolTable.putLocalVar(getLocalVarName(ctx), Type.CHARARRAY);
-            } else if (typeName.equals("int")) {
+            else if (typeName.equals("int"))
                 symbolTable.putLocalVar(getLocalVarName(ctx), Type.INTARRAY);
-            }
         } else if (isDeclWithInit(ctx)) {
-            symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.INT, initVal(ctx));
+            if(typeName.equals("char"))
+                symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.CHAR, initVal(ctx));
+            else if(typeName.equals("int"))
+                symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.INT, initVal(ctx));
         } else { // simple decl
-            symbolTable.putLocalVar(getLocalVarName(ctx), Type.INT);
+            if(typeName.equals("char"))
+                symbolTable.putLocalVar(getLocalVarName(ctx), Type.CHAR);
+            else if(typeName.equals("int"))
+                symbolTable.putLocalVar(getLocalVarName(ctx), Type.INT);
         }
     }
 
@@ -323,7 +328,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             } else if (ctx.CHAR_SET() != null) {
                 String charStr = ctx.CHAR_SET().getText();
                 int char2int = charStr.charAt(1);
-                expr += makeTabs() + "ldc " + char2int + " \n";
+                expr += makeTabs() + "bipush " + char2int + " \n";
             }
         } else if (ctx.getChildCount() == 2) { // UnaryOperation
 //			expr = handleUnaryExpr(ctx, newTexts.get(ctx) + expr);
@@ -337,7 +342,6 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                         + makeTabs() + "istore_" + symbolTable.getVarId(ctx.IDENT().getText()) + "\n";
             } else { // binary operation
                 // bug fix
-//				expr = handleBinExpr(ctx.expr(0), expr);
                 expr = handleBinExpr(ctx, expr);
             }
         }
@@ -533,10 +537,16 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 
     private String handleFunCall(MiniCParser.ExprContext ctx, String expr) {
         String fname = getFunName(ctx);
-        if (fname.equals("_print")) {        // System.out.println
+        if (fname.equals("_print")) { // System.out.println
+            String arg=ctx.args().expr(0).getText();
+            if(symbolTable.getVarType(arg) == Type.CHAR){
+                arg="(C)";
+            } else {
+                arg="(I)";
+            }
             expr = makeTabs() + "getstatic java/lang/System/out Ljava/io/PrintStream;" + "\n"
                     + newTexts.get(ctx.args())
-                    + makeTabs() + "invokevirtual " + symbolTable.getFunSpecStr("_print") + "\n";
+                    + makeTabs() + "invokevirtual " + symbolTable.getFunSpecStr("_print")+ arg +"V"+ "\n";
         } else {
             expr = newTexts.get(ctx.args())
                     + makeTabs() + "invokestatic " + getCurrentClassName() + "/" + symbolTable.getFunSpecStr(fname) + "\n";

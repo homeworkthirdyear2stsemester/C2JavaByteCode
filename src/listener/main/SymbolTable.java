@@ -154,7 +154,8 @@ public class SymbolTable {
 
     private void initFunTable() {
         FInfo printlninfo = new FInfo();
-        printlninfo.sigStr = "java/io/PrintStream/println(I)V";
+//        printlninfo.sigStr = "java/io/PrintStream/println(I)V";
+        printlninfo.sigStr = "java/io/PrintStream/println";
 
         FInfo maininfo = new FInfo();
         maininfo.sigStr = "main([Ljava/lang/String;)V";

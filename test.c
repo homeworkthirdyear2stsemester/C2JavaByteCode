@@ -1,6 +1,7 @@
 void main() {
-    float a;
-    a = 1.5123;
-
+    char a;
+    int b=1;
+    a = 'c';
+    _print(b);
    return;
 }
