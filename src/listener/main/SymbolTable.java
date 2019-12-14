@@ -19,9 +19,9 @@ public class SymbolTable {
     static public class VarInfo {
         Type type;
         int id;
-        int initVal;
+        Object initVal;
 
-        public VarInfo(Type type, int id, int initVal) {
+        public VarInfo(Type type, int id, Object initVal) {
             this.type = type;
             this.id = id;
             this.initVal = initVal;
@@ -85,10 +85,6 @@ public class SymbolTable {
         this.putGlobalVar(varname, getType); // 추가
     }
 
-    void putGlobalVarWithInitVal(String varname, Type type, Object varData) {
-
-    }
-
     Type getTypeFromString(ParseTree typeNode) {
         switch (typeNode.getText()) {
             case "int":
@@ -110,7 +106,7 @@ public class SymbolTable {
         _lsymtable.put(varname, vInfo);
     }
 
-    void putGlobalVarWithInitVal(String varname, Type type, int initVar) {
+    void putGlobalVarWithInitVal(String varname, Type type, Object initVar) {
         // 초기값 있 전역 변수는
         VarInfo vInfo = new VarInfo(type, _globalVarID++, initVar);
         _gsymtable.put(varname, vInfo);

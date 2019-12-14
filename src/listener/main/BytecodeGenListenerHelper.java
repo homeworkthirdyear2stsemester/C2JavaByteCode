@@ -17,8 +17,20 @@ public class BytecodeGenListenerHelper {
     }
 
     // global vars
-    static int initVal(Var_declContext ctx) {
-        return Integer.parseInt(ctx.LITERAL().getText());
+    static Object initVal(Var_declContext ctx, SymbolTable.Type type) {
+        String value = ctx.LITERAL().getText();
+        switch (type) {
+            case INT:
+                return Integer.parseInt(value);
+            case DOUBLE:
+                return Double.parseDouble(value);
+            case CHAR:
+                return value.charAt(0);
+            case FLOAT:
+                return Float.parseFloat(value);
+            default:
+                return value;
+        }
     }
 
     // var_decl	: type_spec IDENT '=' LITERAL ';

@@ -50,7 +50,8 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         if (isArrayDecl(ctx)) {
             symbolTable.putGlobalVar(varName, Type.INTARRAY);
         } else if (isDeclWithInit(ctx)) {
-            symbolTable.putGlobalVarWithInitVal(varName, Type.INT, initVal(ctx));
+            Type type = symbolTable.getTypeFromString(ctx.getChild(0));
+            symbolTable.putGlobalVarWithInitVal(varName, type, initVal(ctx, type));
         } else { // simple decl
             symbolTable.putGlobalVar(varName, ctx);
         }
