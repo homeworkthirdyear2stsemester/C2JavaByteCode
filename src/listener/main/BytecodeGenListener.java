@@ -438,16 +438,26 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                 // a[n] 과 같은것 로드
                 String varName = ctx.getChild(0).getText();
                 String index = ctx.expr(0).getText();
-                String varId = symbolTable.getVarId(varName);
+
                 String tabs = makeTabs();
                 String load = "";
+
+                String loadVariable ="";
+                // 글로벌인지 확인한다.
+                if(symbolTable.getVarId(varName).charAt(0) == className){
+                    loadVariable = tabs + "getstatic " + symbolTable.getVarId(varName);
+                }else{
+                    String varId = symbolTable.getVarId(varName);
+                    loadVariable = tabs + "aload " + varId + '\n';
+                }
+
                 Type varType = symbolTable.getVarType(varName);
                 if (varType == Type.INTARRAY) {
                     load = "iaload";
                 } else if (varType == Type.CHARARRAY) {
                     load = "caload";
                 }
-                expr += tabs + "aload " + varId + '\n'
+                expr += loadVariable
                         + tabs + "bipush " + index + '\n'
                         + tabs + load + "\n";
             }
@@ -457,18 +467,36 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             if (symbolTable.getVarType(varName) == Type.INTARRAY) {
                 String index = ctx.expr(0).getText();
                 String value = ctx.expr(1).getText();
-                String varId = symbolTable.getVarId(varName);
                 String tabs = makeTabs();
-                expr += tabs + "aload " + varId + '\n'
+
+                String loadVariable ="";
+                // 글로벌인지 확인한다.
+                if(symbolTable.getVarId(varName).charAt(0) == className){
+                    loadVariable = tabs + "getstatic " + symbolTable.getVarId(varName);
+                }else{
+                    String varId = symbolTable.getVarId(varName);
+                    loadVariable = tabs + "aload " + varId + '\n';
+                }
+
+                expr += loadVariable
                         + tabs + "bipush " + index + '\n'
                         + tabs + "bipush " + value + '\n'
                         + tabs + "iastore \n";
             } else if (symbolTable.getVarType(varName) == Type.CHARARRAY) {
                 String index = ctx.expr(0).getText();
                 int value = (int) ctx.expr(1).getText().charAt(1);
-                String varId = symbolTable.getVarId(varName);
                 String tabs = makeTabs();
-                expr += tabs + "aload " + varId + '\n'
+
+                String loadVariable ="";
+                // 글로벌인지 확인한다.
+                if(symbolTable.getVarId(varName).charAt(0) == className){
+                    loadVariable = tabs + "getstatic " + symbolTable.getVarId(varName);
+                }else{
+                    String varId = symbolTable.getVarId(varName);
+                    loadVariable = tabs + "aload " + varId + '\n';
+                }
+
+                expr += loadVariable
                         + tabs + "bipush " + index + '\n'
                         + tabs + "bipush " + value + '\n'
                         + tabs + "iastore \n";
