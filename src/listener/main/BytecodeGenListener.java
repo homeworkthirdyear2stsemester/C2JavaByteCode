@@ -51,7 +51,9 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         String varName = ctx.IDENT().getText();
 
         if (isArrayDecl(ctx)) {
-            symbolTable.putGlobalVar(varName, Type.INTARRAY);
+            String typeStr = ctx.getChild(0).getText();
+            symbolTable.putGlobalVar(varName, getArrayTypeEnum(typeStr));
+            prolog += ".field  public static " + varName + " " + getArrayType(typeStr) + "\n";
         } else{
             String typeStr = ctx.getChild(0).getText();
             prolog += ".field  public static " + varName + " " + getType(typeStr) + "\n";
@@ -226,8 +228,11 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
     public void exitVar_decl(MiniCParser.Var_declContext ctx) {
         String varName = ctx.IDENT().getText();
         String varDecl = "";
-
-        if (isDeclWithInit(ctx)) {
+        if(isArrayDecl(ctx)){
+            varDecl +="     ldc " + ctx.LITERAL().getText() + "\n"
+                    + "    newarray " + ctx.getChild(0).getText() + "\n"
+                    + "    putstatic " + symbolTable.getVarId(varName);
+        }else if (isDeclWithInit(ctx)) {
             varDecl += "     aload 0\n"
                     +"     ldc " + ctx.LITERAL().getText() + "\n"
                     + "    putstatic " + symbolTable.getVarId(varName);

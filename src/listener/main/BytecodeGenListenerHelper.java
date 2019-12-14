@@ -48,10 +48,39 @@ public class BytecodeGenListenerHelper {
         return null;
     }
 
+    static String getArrayType(String type){
+        switch (type) {
+            case "int":
+                return "[I";
+            case "float":
+                return "[F";
+            case "double":
+                return "[D";
+            case "char":
+                return "[C";
+        }
+        return null;
+    }
+
+    static SymbolTable.Type getArrayTypeEnum(String type){
+        switch (type) {
+            case "int":
+                return SymbolTable.Type.INTARRAY;
+            case "float":
+                return SymbolTable.Type.FLOAT_ARRAY;
+            case "double":
+                return SymbolTable.Type.DOUBLE_ARRAY;
+            case "char":
+                return SymbolTable.Type.CHARARRAY;
+        }
+        return null;
+    }
+
     // var_decl	: type_spec IDENT '=' LITERAL ';
     static boolean isDeclWithInit(Var_declContext ctx) {
         return ctx.getChildCount() == 5;
     }
+
 
     // var_decl	: type사_spec IDENT '[' LITERAL ']' ';'
     static boolean isArrayDecl(Var_declContext ctx) {
