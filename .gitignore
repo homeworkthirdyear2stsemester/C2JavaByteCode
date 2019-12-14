@@ -25,7 +25,7 @@ out
 /nbdist/
 /.nb-gradle/
 /build/
-
+test.c
 ### VS Code ###
 .vscode/
 /bin/
