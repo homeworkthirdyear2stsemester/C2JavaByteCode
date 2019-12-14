@@ -16,7 +16,9 @@ import static listener.main.SymbolTable.Type;
 public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeListener {
     ParseTreeProperty<String> newTexts = new ParseTreeProperty<>();
     SymbolTable symbolTable = new SymbolTable();
-
+    String globalType = "global";
+    String prolog = ".class public Test\n" +
+            ".super java/lang/Object\n" ;
     int tab = 0;
     int label = 0;
 
@@ -47,13 +49,18 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
     @Override
     public void enterVar_decl(MiniCParser.Var_declContext ctx) {
         String varName = ctx.IDENT().getText();
+
         if (isArrayDecl(ctx)) {
             symbolTable.putGlobalVar(varName, Type.INTARRAY);
-        } else if (isDeclWithInit(ctx)) {
-            Type type = symbolTable.getTypeFromString(ctx.getChild(0));
-            symbolTable.putGlobalVarWithInitVal(varName, type, initVal(ctx, type));
-        } else { // simple decl
-            symbolTable.putGlobalVar(varName, ctx);
+        } else{
+            String typeStr = ctx.getChild(0).getText();
+            prolog += ".field  public " + varName + " " + getType(typeStr) + "\n";
+            if (isDeclWithInit(ctx)) {
+                Type type = symbolTable.getTypeFromString(ctx.getChild(0));
+                symbolTable.putGlobalVarWithInitVal(varName, type, initVal(ctx, type));
+            } else { // simple decl
+                symbolTable.putGlobalVar(varName, ctx);
+            }
         }
     }
 
@@ -82,7 +89,11 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 
     @Override
     public void exitProgram(MiniCParser.ProgramContext ctx) {
-        String classProlog = getFunProlog();
+        prolog += ".method public <init>()V\n" +
+                "   .limit stack 3\n" +
+                "   .limit locals 1\n";
+        String endOfProlog = "\treturn\n" +
+                ".end method\n\n";
         String fun_decl = "", var_decl = "";
 
         for (int i = 0; i < ctx.getChildCount(); i++) {
@@ -91,7 +102,8 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             else
                 var_decl += newTexts.get(ctx.decl(i));
         }
-        newTexts.put(ctx, classProlog + var_decl + fun_decl);
+        prolog += var_decl + endOfProlog;
+        newTexts.put(ctx, prolog + fun_decl);
         System.out.println(newTexts.get(ctx));
     }
 
@@ -212,7 +224,9 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         String varDecl = "";
 
         if (isDeclWithInit(ctx)) {
-            varDecl += makeTabs() + "putfield " + varName + "\n";
+            varDecl += "aload 0\n"
+                    +makeTabs() + "ldc " + ctx.LITERAL().getText() + "\n"
+                    +makeTabs() + "putfield " + symbolTable.getVarId(varName) + "\n";
             // v. initialization => Later! skip now..:
         }
         newTexts.put(ctx, varDecl);
@@ -365,7 +379,12 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             if (ctx.IDENT() != null) {
                 String idName = ctx.IDENT().getText();
                 if (symbolTable.getVarType(idName) == Type.INT || symbolTable.getVarType(idName) == Type.CHAR) {
-                    expr += makeTabs() + "iload_" + symbolTable.getVarId(idName) + " \n";
+                    // 글로벌 변수일 경우
+                    if(symbolTable.getVarId(idName).equals(globalType)){
+                        expr += "getstatic\n";
+                    }else{
+                        expr += makeTabs() + "iload_" + symbolTable.getVarId(idName) + " \n";
+                    }
                 }
                 //else	// Type int array => Later! skip now..
                 //	expr += "           lda " + symbolTable.get(ctx.IDENT().getText()).value + " \n";
@@ -385,8 +404,13 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             if (ctx.getChild(0).getText().equals("(")) {        // '(' expr ')'
                 expr = newTexts.get(ctx.expr(0));
             } else if (ctx.getChild(1).getText().equals("=")) {    // IDENT '=' expr
-                expr = newTexts.get(ctx.expr(0))
-                        + makeTabs() + "istore_" + symbolTable.getVarId(ctx.IDENT().getText()) + "\n";
+                if(symbolTable.getVarId(ctx.IDENT().getText()).equals(globalType)){
+                    expr = newTexts.get(ctx.expr(0))
+                            + makeTabs() + "putstatic\n";
+                }else{
+                    expr = newTexts.get(ctx.expr(0))
+                            + makeTabs() + "istore_" + symbolTable.getVarId(ctx.IDENT().getText()) + "\n";
+                }
             } else { // binary operation
                 // bug fix
                 expr = handleBinExpr(ctx, expr);

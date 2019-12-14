@@ -1,4 +1,6 @@
 package listener.main;
+
+import listener.main.BytecodeGenListener;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -8,21 +10,21 @@ import generated.*;
 
 public class Translator {
 	enum OPTIONS {
-		PRETTYPRINT, BYTECODEGE
-			return OPTIONS.BYTECODN, UCODEGEN, ERROR
+		PRETTYPRINT, BYTECODEGEN, UCODEGEN, ERROR
 	}
 	private static OPTIONS getOption(String[] args){
-		if (args.length < 1)EGEN;
-		if (args[0].startsWith("-p") 
+		if (args.length < 1)
+			return OPTIONS.BYTECODEGEN;
+		if (args[0].startsWith("-p")
 				|| args[0].startsWith("-P"))
 			return OPTIONS.PRETTYPRINT;
-		if (args[0].startsWith("-b") 
+		if (args[0].startsWith("-b")
 				|| args[0].startsWith("-B"))
 			return OPTIONS.BYTECODEGEN;
-		if (args[0].startsWith("-u") 
+		if (args[0].startsWith("-u")
 				|| args[0].startsWith("-U"))
 			return OPTIONS.UCODEGEN;
-		
+
 		return OPTIONS.ERROR;
 	}
 	

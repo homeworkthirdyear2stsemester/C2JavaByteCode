@@ -34,6 +34,20 @@ public class BytecodeGenListenerHelper {
         }
     }
 
+    static String getType(String type){
+        switch (type) {
+            case "int":
+                return "I";
+            case "float":
+                return "F";
+            case "double":
+                return "D";
+            case "char":
+                return "C";
+        }
+        return null;
+    }
+
     // var_decl	: type_spec IDENT '=' LITERAL ';
     static boolean isDeclWithInit(Var_declContext ctx) {
         return ctx.getChildCount() == 5;
@@ -162,9 +176,8 @@ public class BytecodeGenListenerHelper {
                 "\t.limit stack 1\n" +
                 "\t.limit locals 1\n" +
                 "\taload_0\n" +
-                "\tinvokespecial java/lang/Object/<init>()V\n" +
-                "\treturn\n" +
-                ".end method\n\n";
+                "\tinvokespecial java/lang/Object/<init>()V\n";
+
         return prolog;
     }
 
