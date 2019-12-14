@@ -317,7 +317,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         } else if (ctx.getChildCount() == 1) { // IDENT | LITERAL
             if (ctx.IDENT() != null) {
                 String idName = ctx.IDENT().getText();
-                if (symbolTable.getVarType(idName) == Type.INT) {
+                if (symbolTable.getVarType(idName) == Type.INT || symbolTable.getVarType(idName) == Type.CHAR) {
                     expr += makeTabs() + "iload_" + symbolTable.getVarId(idName) + " \n";
                 }
                 //else	// Type int array => Later! skip now..
