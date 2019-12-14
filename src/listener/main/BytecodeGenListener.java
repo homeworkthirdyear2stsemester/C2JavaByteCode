@@ -198,7 +198,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         header.append(makeTabs() + ".method public static " + symbolTable.getFunSpecStr(fname) + "\n");
         // 원상복구
         increaseTabs();
-        header.append(makeTabs() + ".limit stack " + getStackSize(ctx) + "\n");
+        header.append(makeTabs() + ".limit stack " + getStackSize(newTexts.get(ctx.compound_stmt())) + "\n");
         header.append(makeTabs() + ".limit locals " + getLocalVarSize(ctx) + "\n");
         return header.toString();
     }

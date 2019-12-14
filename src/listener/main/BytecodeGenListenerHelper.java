@@ -83,8 +83,17 @@ public class BytecodeGenListenerHelper {
     }
 
     // <information extraction>
-    static String getStackSize(Fun_declContext ctx) {
-        return "32";
+
+    static String getStackSize(String stmt) {
+        int stackSize=0;
+        String[] sp=stmt.split("\t|\n");
+        for(int i=0; i<sp.length; i++){
+            if(sp[i].contains("load")|sp[i].contains("const")|sp[i].contains("dup")
+                    |sp[i].contains("invoke")|sp[i].contains("jsr")|sp[i].contains("ldc")|sp[i].contains("push")){
+                stackSize++;
+            }
+        }
+        return stackSize+"";
     }
 
     static String getLocalVarSize(Fun_declContext ctx) {
@@ -92,7 +101,9 @@ public class BytecodeGenListenerHelper {
         if(getFunName(ctx).equals("main")){
             localVarSize++;
         }
-        int params=ctx.params().getChildCount()/2+1;
+        int params=ctx.params().getChildCount();
+        if(params>0)
+            params=ctx.params().getChildCount()/2+1;
         localVarSize+=params;
         ArrayList compoundStmt= (ArrayList) ctx.compound_stmt().children;
         for(int i=0; i<compoundStmt.size(); i++){
