@@ -39,7 +39,10 @@ if_stmt     : IF '(' expr ')' stmt
 return_stmt : RETURN ';'
       | RETURN expr ';'           ;
 for_stmt : FOR '(' for_condition ')' compound_stmt       ;
-for_condition: expr ';' expr ';' expr   ;
+for_condition: expr ';' expr ';' expr
+       | ';' expr ';' expr
+       | ';' expr ';'
+       | expr ';' expr ';';
 expr    :  LITERAL
    | '(' expr ')'
    | CHAR_SET
