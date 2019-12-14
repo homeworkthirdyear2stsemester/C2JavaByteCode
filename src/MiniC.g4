@@ -7,6 +7,7 @@ program : decl+         ;
 decl        : var_decl
       | fun_decl      ;
 var_decl   :  type_spec IDENT ';'
+         | type_spec IDENT '=' CHAR_SET ';'
          | type_spec IDENT '=' LITERAL ';'
          | type_spec IDENT '[' LITERAL ']' ';'   ;
 type_spec   : VOID
@@ -32,8 +33,7 @@ compound_stmt: '{' local_decl* stmt* '}'   ;
 local_decl   : type_spec IDENT ';'
       | type_spec IDENT '=' CHAR_SET ';'
       | type_spec IDENT '=' LITERAL ';'
-      | type_spec IDENT '[' LITERAL ']' ';'
-      | type_spec IDENT '=' LITERAL ';' ;
+      | type_spec IDENT '[' LITERAL ']' ';'     ;
 if_stmt     : IF '(' expr ')' stmt
       | IF '(' expr ')' stmt ELSE stmt       ;
 return_stmt : RETURN ';'
@@ -42,7 +42,6 @@ for_stmt : FOR '(' for_condition ')' compound_stmt       ;
 for_condition: expr ';' expr ';' expr   ;
 expr    :  LITERAL
    | '(' expr ')'
-   | FLOAT_IDENT
    | CHAR_SET
    | IDENT
    | IDENT '[' expr ']'
@@ -120,10 +119,9 @@ AlPHA_CHAR
    | '\uFDF0' .. '\uFFFD'
    ;
 
-FLOAT_IDENT : [0-9]+'.'[0-9]+ ;
 
 
-LITERAL:   DecimalConstant     |   OctalConstant     |   HexadecimalConstant     ;
+LITERAL:   DecimalConstant     |   OctalConstant     |   HexadecimalConstant    | FLOAT_IDENT ;
 
 DecimalConstant
     :   '0'
@@ -137,6 +135,9 @@ OctalConstant
 HexadecimalConstant
     :   '0' [xX] [0-9a-fA-F] +
     ;
+
+FLOAT_IDENT : DecimalConstant'.'[0-9]+ ;
+
 
 WS  :   (   ' '
         |   '\t'
