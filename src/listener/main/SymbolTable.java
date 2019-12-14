@@ -184,28 +184,46 @@ public class SymbolTable {
         String fname = getFunName(ctx);
         StringBuilder argtype = new StringBuilder();
         String rtype = "";
-        String res = "";
-        String[] argTypeSplit = getParamTypesText(ctx.params()).split("//");
-        // getParamTypesText함수를 이용하여 모두 가져와 알맞게 I와 V로 변환
-        for (int i = 0; i < argTypeSplit.length; i++) {
-            switch (argTypeSplit[i]) {
-                case "int":
-                    argtype.append("I");
-                    break;
-                case "void":
-                    argtype.append("V");
-                    break;
-                case "float":
-                    argtype.append("F");
-                    break;
-                case "double":
-                    argtype.append("D");
-                    break;
-                case "char":
-                    argtype.append("C");
-                    break;
+
+        MiniCParser.ParamsContext params = ctx.params();
+        for (int i = 0; i < params.param().size(); i++) {
+            String typeSpec = params.param(i).type_spec().getText();
+            if (isArrayParamDecl(params.param(i))) { // array
+                switch (typeSpec) {
+                    case "int":
+                        argtype.append("[I");
+                        break;
+                    case "float":
+                        argtype.append("[F");
+                        break;
+                    case "double":
+                        argtype.append("[D");
+                        break;
+                    case "char":
+                        argtype.append("[C");
+                        break;
+                }
+            } else { // primitive type
+                switch (typeSpec) {
+                    case "int":
+                        argtype.append("I");
+                        break;
+                    case "void":
+                        argtype.append("V");
+                        break;
+                    case "float":
+                        argtype.append("F");
+                        break;
+                    case "double":
+                        argtype.append("D");
+                        break;
+                    case "char":
+                        argtype.append("C");
+                        break;
+                }
             }
         }
+
         // 반환형은 하나이므로 반복문 없이 switch로 연산함
         switch (ctx.type_spec().getText()) {
             case "int":
@@ -225,7 +243,7 @@ public class SymbolTable {
                 break;
         }
         // 합쳐서 함수 심볼테이블에 저장
-        res = fname + "(" + argtype + ")" + rtype;
+        String res = fname + "(" + argtype + ")" + rtype;
 
         FInfo finfo = new FInfo();
         finfo.sigStr = res;
