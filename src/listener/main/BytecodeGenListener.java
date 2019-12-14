@@ -16,7 +16,7 @@ import static listener.main.SymbolTable.Type;
 public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeListener {
     ParseTreeProperty<String> newTexts = new ParseTreeProperty<>();
     SymbolTable symbolTable = new SymbolTable();
-    String globalType = "global";
+    char className = 'T';
     String prolog = ".class public Test\n" +
             ".super java/lang/Object\n" ;
     int tab = 0;
@@ -54,7 +54,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             symbolTable.putGlobalVar(varName, Type.INTARRAY);
         } else{
             String typeStr = ctx.getChild(0).getText();
-            prolog += ".field  public " + varName + " " + getType(typeStr) + "\n";
+            prolog += ".field  public static " + varName + " " + getType(typeStr) + "\n";
             if (isDeclWithInit(ctx)) {
                 Type type = symbolTable.getTypeFromString(ctx.getChild(0));
                 symbolTable.putGlobalVarWithInitVal(varName, type, initVal(ctx, type));
@@ -91,9 +91,13 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
     public void exitProgram(MiniCParser.ProgramContext ctx) {
         prolog += ".method public <init>()V\n" +
                 "   .limit stack 3\n" +
-                "   .limit locals 1\n";
-        String endOfProlog = "\treturn\n" +
+                "   .limit locals 1\n"+
+                "   return\n" +
                 ".end method\n\n";
+        String staticProlog = ".method static public <clinit>()V\n" +
+                "   .limit stack 2\n";
+        String staticEpilog = "    return\n" +
+                ".end method\n";
         String fun_decl = "", var_decl = "";
 
         for (int i = 0; i < ctx.getChildCount(); i++) {
@@ -102,8 +106,8 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             else
                 var_decl += newTexts.get(ctx.decl(i));
         }
-        prolog += var_decl + endOfProlog;
-        newTexts.put(ctx, prolog + fun_decl);
+        String staticLogic = staticProlog + var_decl + staticEpilog;
+        newTexts.put(ctx, prolog + staticLogic + fun_decl);
         System.out.println(newTexts.get(ctx));
     }
 
@@ -224,9 +228,9 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         String varDecl = "";
 
         if (isDeclWithInit(ctx)) {
-            varDecl += "aload 0\n"
-                    +makeTabs() + "ldc " + ctx.LITERAL().getText() + "\n"
-                    +makeTabs() + "putfield " + symbolTable.getVarId(varName) + "\n";
+            varDecl += "     aload 0\n"
+                    +"     ldc " + ctx.LITERAL().getText() + "\n"
+                    + "    putstatic " + symbolTable.getVarId(varName);
             // v. initialization => Later! skip now..:
         }
         newTexts.put(ctx, varDecl);
@@ -379,9 +383,11 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             if (ctx.IDENT() != null) {
                 String idName = ctx.IDENT().getText();
                 if (symbolTable.getVarType(idName) == Type.INT || symbolTable.getVarType(idName) == Type.CHAR) {
+
                     // 글로벌 변수일 경우
-                    if(symbolTable.getVarId(idName).equals(globalType)){
-                        expr += "getstatic\n";
+                    if(symbolTable.getVarId(idName).charAt(0) == className){
+                        expr += makeTabs() + "aload 0 \n"
+                                + makeTabs() + "getstatic " + symbolTable.getVarId(idName);
                     }else{
                         expr += makeTabs() + "iload_" + symbolTable.getVarId(idName) + " \n";
                     }
@@ -404,9 +410,11 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             if (ctx.getChild(0).getText().equals("(")) {        // '(' expr ')'
                 expr = newTexts.get(ctx.expr(0));
             } else if (ctx.getChild(1).getText().equals("=")) {    // IDENT '=' expr
-                if(symbolTable.getVarId(ctx.IDENT().getText()).equals(globalType)){
-                    expr = newTexts.get(ctx.expr(0))
-                            + makeTabs() + "putstatic\n";
+                // 글로벌 변수일 경우
+                if(symbolTable.getVarId(ctx.IDENT().getText()).charAt(0) == className){
+                    expr = makeTabs() + "aload 0 \n"
+                            + newTexts.get(ctx.expr(0))
+                            + makeTabs() + "putstatic " + symbolTable.getVarId(ctx.IDENT().getText());
                 }else{
                     expr = newTexts.get(ctx.expr(0))
                             + makeTabs() + "istore_" + symbolTable.getVarId(ctx.IDENT().getText()) + "\n";

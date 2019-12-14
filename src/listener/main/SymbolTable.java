@@ -277,7 +277,7 @@ public class SymbolTable {
                     rtype = "C";
                     break;
             }
-            return "Test/" + name + " "  + rtype;
+            return "Test/" + name + " "  + rtype + '\n';
         }
         return null;
     }
