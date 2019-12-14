@@ -4,6 +4,7 @@ import generated.MiniCParser;
 import generated.MiniCParser.Fun_declContext;
 import generated.MiniCParser.Local_declContext;
 import generated.MiniCParser.Var_declContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -75,6 +76,32 @@ public class SymbolTable {
         // 초기값 없는 전역 변수
         VarInfo vInfo = new VarInfo(type, _globalVarID++);
         _gsymtable.put(varname, vInfo);
+    }
+
+    void putGlobalVar(String varname, MiniCParser.Var_declContext ctx) {
+        ParseTree typeNode = ctx.getChild(0);
+        Type getType = this.getTypeFromString(typeNode);
+
+        this.putGlobalVar(varname, getType); // 추가
+    }
+
+    void putGlobalVarWithInitVal(String varname, Type type, Object varData) {
+
+    }
+
+    Type getTypeFromString(ParseTree typeNode) {
+        switch (typeNode.getText()) {
+            case "int":
+                return Type.INT;
+            case "float":
+                return Type.FLOAT;
+            case "void":
+                return Type.VOID;
+            case "double":
+                return Type.DOUBLE;
+            default:
+                return Type.ERROR;
+        }
     }
 
     void putLocalVarWithInitVal(String varname, Type type, int initVar) {

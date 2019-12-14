@@ -52,7 +52,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         } else if (isDeclWithInit(ctx)) {
             symbolTable.putGlobalVarWithInitVal(varName, Type.INT, initVal(ctx));
         } else { // simple decl
-            symbolTable.putGlobalVar(varName, Type.INT);
+            symbolTable.putGlobalVar(varName, ctx);
         }
     }
 
@@ -319,9 +319,9 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             } else if (ctx.LITERAL() != null) {
                 String literalStr = ctx.LITERAL().getText();
                 expr += makeTabs() + "ldc " + literalStr + " \n";
-            } else if (ctx.CHAR_SET()!=null){
+            } else if (ctx.CHAR_SET() != null) {
                 String charStr = ctx.CHAR_SET().getText();
-                int char2int=charStr.charAt(1);
+                int char2int = charStr.charAt(1);
                 expr += makeTabs() + "ldc " + char2int + " \n";
             }
         } else if (ctx.getChildCount() == 2) { // UnaryOperation
