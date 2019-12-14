@@ -3,8 +3,9 @@ package listener.main;
 import generated.MiniCParser;
 import generated.MiniCParser.*;
 
-public class BytecodeGenListenerHelper {
+import java.util.ArrayList;
 
+public class BytecodeGenListenerHelper {
     // <boolean functions>
 
     static boolean isFunDecl(MiniCParser.ProgramContext ctx, int i) {
@@ -87,7 +88,16 @@ public class BytecodeGenListenerHelper {
     }
 
     static String getLocalVarSize(Fun_declContext ctx) {
-        return "32";
+        int localVarSize=0;
+        if(getFunName(ctx).equals("main")){
+            localVarSize++;
+        }
+        ArrayList compoundStmt= (ArrayList) ctx.compound_stmt().children;
+        for(int i=0; i<compoundStmt.size(); i++){
+            if(compoundStmt.get(i) instanceof Local_declContext)
+                localVarSize++;
+        }
+        return localVarSize+"";
     }
 
     static String getTypeText(Type_specContext typespec) {
