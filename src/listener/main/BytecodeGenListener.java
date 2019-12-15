@@ -102,6 +102,8 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         prolog += ".method public <init>()V\n" +
                 "   .limit stack 3\n" +
                 "   .limit locals 1\n"+
+                "   aload_0\n" +
+                "  invokespecial java/lang/Object/<init>()V\n"+
                 "   return\n" +
                 ".end method\n\n";
         String staticProlog = ".method static public <clinit>()V\n" +
@@ -404,6 +406,24 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                     }else{
                         expr += makeTabs() + "iload_" + symbolTable.getVarId(idName) + " \n";
                     }
+                } else if(symbolTable.getVarType(idName)==Type.FLOAT){
+                    // todo 맞는지 확인부탁
+                    String inGlobal = symbolTable.getVarId(idName);
+                    if(inGlobal != null && inGlobal.charAt(0) == className){
+                        expr += makeTabs() + "aload 0 \n"
+                                + makeTabs() + "getstatic " + symbolTable.getVarId(idName);
+                    }else{
+                        expr += makeTabs() + "fload_" + symbolTable.getVarId(idName) + " \n";
+                    }
+                }  else if(symbolTable.getVarType(idName)==Type.DOUBLE){
+                    // todo 맞는지 확인부탁
+                    String inGlobal = symbolTable.getVarId(idName);
+                    if(inGlobal != null && inGlobal.charAt(0) == className){
+                        expr += makeTabs() + "aload 0 \n"
+                                + makeTabs() + "getstatic " + symbolTable.getVarId(idName);
+                    }else{
+                        expr += makeTabs() + "dload_" + symbolTable.getVarId(idName) + " \n";
+                    }
                 }
                 //else	// Type int array => Later! skip now..
                 //	expr += "           lda " + symbolTable.get(ctx.IDENT().getText()).value + " \n";
@@ -436,8 +456,17 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                             + newTexts.get(ctx.expr(0))
                             + makeTabs() + "putstatic " + symbolTable.getVarId(ctx.IDENT().getText());
                 }else{
-                    expr = newTexts.get(ctx.expr(0))
-                            + makeTabs() + "istore_" + symbolTable.getVarId(ctx.IDENT().getText()) + "\n";
+                    String store="";
+                    if(symbolTable.getVarType(ctx.IDENT().getText()).name().equals("DOUBLE"))
+                        store="dstore_";
+                    else if(symbolTable.getVarType(ctx.IDENT().getText()).name().equals("INT")|symbolTable.getVarType(ctx.IDENT().getText()).name().equals("CHAR"))
+                        store="istore_";
+                    else if(symbolTable.getVarType(ctx.IDENT().getText()).name().equals("FLOAT"))
+                        store="fstore_";
+
+                    if(!store.equals(""))
+                        expr = newTexts.get(ctx.expr(0))
+                            + makeTabs() + store + symbolTable.getVarId(ctx.IDENT().getText()) + "\n";
                 }
             } else { // binary operation
                 // bug fix
@@ -692,7 +721,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             } else if (symbolTable.getVarType(arg) == Type.DOUBLE) {
                 arg = "(D)";
             } else if (symbolTable.getVarType(arg) == Type.FLOAT) {
-                arg = "(D)";
+                arg = "(F)";
             } else {
                 arg = "(I)";
             }
