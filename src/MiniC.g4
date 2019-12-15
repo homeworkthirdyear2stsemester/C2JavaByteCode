@@ -124,9 +124,13 @@ AlPHA_CHAR
    ;
 
 
+
+
+LITERAL:   DecimalConstant     |   OctalConstant     |   HexadecimalConstant    | FloatConstant ;
+
 FLOAT_IDENT : DecimalConstant'.'[0-9]+ ;
 
-LITERAL:   DecimalConstant     |   OctalConstant     |   HexadecimalConstant    | FLOAT_IDENT ;
+FloatConstant : DecimalConstant'.'[0-9]+ ;
 
 DecimalConstant
     :   '0'
@@ -140,6 +144,9 @@ OctalConstant
 HexadecimalConstant
     :   '0' [xX] [0-9a-fA-F] +
     ;
+
+
+
 
 
 
