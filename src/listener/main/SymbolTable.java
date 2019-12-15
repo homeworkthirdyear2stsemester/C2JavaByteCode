@@ -105,7 +105,7 @@ public class SymbolTable {
         }
     }
 
-    void putLocalVarWithInitVal(String varname, Type type, int initVar) {
+    void putLocalVarWithInitVal(String varname, Type type, Object initVar) {
         // 초기값 있는 지역 변수
         VarInfo vInfo = new VarInfo(type, _localVarID++, initVar);
         _lsymtable.put(varname, vInfo);

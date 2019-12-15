@@ -77,13 +77,13 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                 symbolTable.putLocalVar(getLocalVarName(ctx), Type.INTARRAY);
         } else if (isDeclWithInit(ctx)) {
             if (typeName.equals("char"))
-                symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.CHAR, initVal(ctx));
+                symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.CHAR, initVal(ctx, Type.CHAR));
             else if (typeName.equals("int"))
-                symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.INT, initVal(ctx));
+                symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.INT, initVal(ctx, Type.INT));
             else if(typeName.equals("double"))
-                symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.DOUBLE, initVal(ctx));
+                symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.DOUBLE, initVal(ctx, Type.DOUBLE));
             else if(typeName.equals("float"))
-                symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.FLOAT, initVal(ctx));
+                symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.FLOAT, initVal(ctx, Type.FLOAT));
         } else { // simple decl
             if (typeName.equals("char"))
                 symbolTable.putLocalVar(getLocalVarName(ctx), Type.CHAR);
@@ -256,9 +256,19 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
     public void exitLocal_decl(MiniCParser.Local_declContext ctx) {
         String varDecl = "";
         if (isDeclWithInit(ctx)) {
+
+            String store="istore_";
+            if(symbolTable.getVarType(ctx.IDENT().getText()).name().equals("DOUBLE"))
+                store="dstore_";
+            else if(symbolTable.getVarType(ctx.IDENT().getText()).name().equals("INT")|symbolTable.getVarType(ctx.IDENT().getText()).name().equals("CHAR"))
+                store="istore_";
+            else if(symbolTable.getVarType(ctx.IDENT().getText()).name().equals("FLOAT"))
+                store="fstore_";
+
+
             String vId = symbolTable.getVarId(ctx);
             varDecl += makeTabs() + "ldc " + ctx.LITERAL().getText() + "\n"
-                    + makeTabs() + "istore_" + vId + "\n";
+                    + makeTabs() + store + vId + "\n";
         } else if (isDeclWithArray(ctx)) {
             String vId = symbolTable.getVarId(ctx);
             String arraySize = ctx.getChild(3).getText();
@@ -435,10 +445,10 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                 int char2int = charStr.charAt(1);
                 expr += makeTabs() + "bipush " + char2int + " \n";
             } else if (ctx.FLOAT_IDENT() != null) {
-                // double
+                // float
                 String doubleStr = ctx.FLOAT_IDENT().getText();
                 expr += makeTabs() + "ldc " + doubleStr + " \n";
-                // todo float
+                // todo double
 
             }
         } else if (ctx.getChildCount() == 2) { // UnaryOperation
