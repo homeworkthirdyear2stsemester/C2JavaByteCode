@@ -445,12 +445,13 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                 int char2int = charStr.charAt(1);
                 expr += makeTabs() + "bipush " + char2int + " \n";
             } else if (ctx.FLOAT_IDENT() != null) {
-                // float
-                String doubleStr = ctx.FLOAT_IDENT().getText();
-                expr += makeTabs() + "ldc " + doubleStr + " \n";
-                // todo double
-//                String ctx.parent.getChild(0);
 
+                String type=symbolTable.getVarType(ctx.parent.getChild(0).getText()).name();
+                String loadConstant="ldc "; // float
+                if(type.equals("DOUBLE"))   // double
+                    loadConstant="ldc2_w ";
+                String doubleStr = ctx.FLOAT_IDENT().getText();
+                expr += makeTabs() + loadConstant + doubleStr + " \n";
             }
         } else if (ctx.getChildCount() == 2) { // UnaryOperation
 //			expr = handleUnaryExpr(ctx, newTexts.get(ctx) + expr);
