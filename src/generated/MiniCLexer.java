@@ -1,4 +1,4 @@
-// Generated from D:/ProgramFiles/IntelliJ/Programs/homework/compiler/lab5_3_final/src\MiniC.g4 by ANTLR 4.7.2
+// Generated from /Users/jongun/cnu/IntelliJ_Project/C2JavaByteCode/src/MiniC.g4 by ANTLR 4.7.2
  
 package generated;
 
@@ -23,8 +23,8 @@ public class MiniCLexer extends Lexer {
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, VOID=20, INT=21, CHAR=22, DOUBLE=23, FLOAT=24, WHILE=25, 
 		IF=26, ELSE=27, RETURN=28, FOR=29, OR=30, AND=31, LE=32, GE=33, EQ=34, 
-		NE=35, IDENT=36, CHAR_SET=37, AlPHA_CHAR=38, LITERAL=39, DecimalConstant=40, 
-		OctalConstant=41, HexadecimalConstant=42, FLOAT_IDENT=43, WS=44;
+		NE=35, IDENT=36, CHAR_SET=37, AlPHA_CHAR=38, FLOAT_IDENT=39, LITERAL=40, 
+		DecimalConstant=41, OctalConstant=42, HexadecimalConstant=43, WS=44;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
 	};
@@ -39,8 +39,8 @@ public class MiniCLexer extends Lexer {
 			"T__9", "T__10", "T__11", "T__12", "T__13", "T__14", "T__15", "T__16", 
 			"T__17", "T__18", "VOID", "INT", "CHAR", "DOUBLE", "FLOAT", "WHILE", 
 			"IF", "ELSE", "RETURN", "FOR", "OR", "AND", "LE", "GE", "EQ", "NE", "IDENT", 
-			"CHAR_SET", "AlPHA_CHAR", "LITERAL", "DecimalConstant", "OctalConstant", 
-			"HexadecimalConstant", "FLOAT_IDENT", "WS"
+			"CHAR_SET", "AlPHA_CHAR", "FLOAT_IDENT", "LITERAL", "DecimalConstant", 
+			"OctalConstant", "HexadecimalConstant", "WS"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -60,8 +60,8 @@ public class MiniCLexer extends Lexer {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, "VOID", "INT", "CHAR", 
 			"DOUBLE", "FLOAT", "WHILE", "IF", "ELSE", "RETURN", "FOR", "OR", "AND", 
-			"LE", "GE", "EQ", "NE", "IDENT", "CHAR_SET", "AlPHA_CHAR", "LITERAL", 
-			"DecimalConstant", "OctalConstant", "HexadecimalConstant", "FLOAT_IDENT", 
+			"LE", "GE", "EQ", "NE", "IDENT", "CHAR_SET", "AlPHA_CHAR", "FLOAT_IDENT", 
+			"LITERAL", "DecimalConstant", "OctalConstant", "HexadecimalConstant", 
 			"WS"
 		};
 	}
@@ -138,16 +138,16 @@ public class MiniCLexer extends Lexer {
 		"\32\3\33\3\33\3\33\3\34\3\34\3\34\3\34\3\34\3\35\3\35\3\35\3\35\3\35\3"+
 		"\35\3\35\3\36\3\36\3\36\3\36\3\37\3\37\3\37\3 \3 \3 \3 \3!\3!\3!\3\"\3"+
 		"\"\3\"\3#\3#\3#\3$\3$\3$\3%\3%\7%\u00cd\n%\f%\16%\u00d0\13%\3&\3&\3&\3"+
-		"&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\5&\u00e2\n&\3\'\3\'\3(\3(\3(\3("+
-		"\5(\u00ea\n(\3)\3)\3)\7)\u00ef\n)\f)\16)\u00f2\13)\5)\u00f4\n)\3*\3*\7"+
-		"*\u00f8\n*\f*\16*\u00fb\13*\3+\3+\3+\6+\u0100\n+\r+\16+\u0101\3,\3,\3"+
+		"&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\3&\5&\u00e2\n&\3\'\3\'\3(\3(\3(\6("+
+		"\u00e9\n(\r(\16(\u00ea\3)\3)\3)\3)\5)\u00f1\n)\3*\3*\3*\7*\u00f6\n*\f"+
+		"*\16*\u00f9\13*\5*\u00fb\n*\3+\3+\7+\u00ff\n+\f+\16+\u0102\13+\3,\3,\3"+
 		",\6,\u0107\n,\r,\16,\u0108\3-\6-\u010c\n-\r-\16-\u010d\3-\3-\2\2.\3\3"+
 		"\5\4\7\5\t\6\13\7\r\b\17\t\21\n\23\13\25\f\27\r\31\16\33\17\35\20\37\21"+
 		"!\22#\23%\24\'\25)\26+\27-\30/\31\61\32\63\33\65\34\67\359\36;\37= ?!"+
 		"A\"C#E$G%I&K\'M(O)Q*S+U,W-Y.\3\2\13\5\2C\\aac|\6\2\62;C\\aac|\17\2C\\"+
 		"c|\u00c2\u00d8\u00da\u00f8\u00fa\u0301\u0372\u037f\u0381\u2001\u200e\u200f"+
-		"\u2072\u2191\u2c02\u2ff1\u3003\ud801\uf902\ufdd1\ufdf2\uffff\3\2\63;\3"+
-		"\2\62;\3\2\629\4\2ZZzz\5\2\62;CHch\5\2\13\f\17\17\"\"\2\u011e\2\3\3\2"+
+		"\u2072\u2191\u2c02\u2ff1\u3003\ud801\uf902\ufdd1\ufdf2\uffff\3\2\62;\3"+
+		"\2\63;\3\2\629\4\2ZZzz\5\2\62;CHch\5\2\13\f\17\17\"\"\2\u011e\2\3\3\2"+
 		"\2\2\2\5\3\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2\2\r\3\2\2\2\2\17"+
 		"\3\2\2\2\2\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2\27\3\2\2\2\2\31\3\2"+
 		"\2\2\2\33\3\2\2\2\2\35\3\2\2\2\2\37\3\2\2\2\2!\3\2\2\2\2#\3\2\2\2\2%\3"+
@@ -162,8 +162,8 @@ public class MiniCLexer extends Lexer {
 		"\3\2\2\2/\u0091\3\2\2\2\61\u0098\3\2\2\2\63\u009e\3\2\2\2\65\u00a4\3\2"+
 		"\2\2\67\u00a7\3\2\2\29\u00ac\3\2\2\2;\u00b3\3\2\2\2=\u00b7\3\2\2\2?\u00ba"+
 		"\3\2\2\2A\u00be\3\2\2\2C\u00c1\3\2\2\2E\u00c4\3\2\2\2G\u00c7\3\2\2\2I"+
-		"\u00ca\3\2\2\2K\u00e1\3\2\2\2M\u00e3\3\2\2\2O\u00e9\3\2\2\2Q\u00f3\3\2"+
-		"\2\2S\u00f5\3\2\2\2U\u00fc\3\2\2\2W\u0103\3\2\2\2Y\u010b\3\2\2\2[\\\7"+
+		"\u00ca\3\2\2\2K\u00e1\3\2\2\2M\u00e3\3\2\2\2O\u00e5\3\2\2\2Q\u00f0\3\2"+
+		"\2\2S\u00fa\3\2\2\2U\u00fc\3\2\2\2W\u0103\3\2\2\2Y\u010b\3\2\2\2[\\\7"+
 		"=\2\2\\\4\3\2\2\2]^\7?\2\2^\6\3\2\2\2_`\7]\2\2`\b\3\2\2\2ab\7_\2\2b\n"+
 		"\3\2\2\2cd\7*\2\2d\f\3\2\2\2ef\7+\2\2f\16\3\2\2\2gh\7.\2\2h\20\3\2\2\2"+
 		"ij\7}\2\2j\22\3\2\2\2kl\7\177\2\2l\24\3\2\2\2mn\7/\2\2n\26\3\2\2\2op\7"+
@@ -197,22 +197,22 @@ public class MiniCLexer extends Lexer {
 		"\7)\2\2\u00de\u00df\7)\2\2\u00df\u00e0\4\u2041\u2042\2\u00e0\u00e2\7)"+
 		"\2\2\u00e1\u00d1\3\2\2\2\u00e1\u00d5\3\2\2\2\u00e1\u00d8\3\2\2\2\u00e1"+
 		"\u00db\3\2\2\2\u00e1\u00de\3\2\2\2\u00e2L\3\2\2\2\u00e3\u00e4\t\4\2\2"+
-		"\u00e4N\3\2\2\2\u00e5\u00ea\5Q)\2\u00e6\u00ea\5S*\2\u00e7\u00ea\5U+\2"+
-		"\u00e8\u00ea\5W,\2\u00e9\u00e5\3\2\2\2\u00e9\u00e6\3\2\2\2\u00e9\u00e7"+
-		"\3\2\2\2\u00e9\u00e8\3\2\2\2\u00eaP\3\2\2\2\u00eb\u00f4\7\62\2\2\u00ec"+
-		"\u00f0\t\5\2\2\u00ed\u00ef\t\6\2\2\u00ee\u00ed\3\2\2\2\u00ef\u00f2\3\2"+
-		"\2\2\u00f0\u00ee\3\2\2\2\u00f0\u00f1\3\2\2\2\u00f1\u00f4\3\2\2\2\u00f2"+
-		"\u00f0\3\2\2\2\u00f3\u00eb\3\2\2\2\u00f3\u00ec\3\2\2\2\u00f4R\3\2\2\2"+
-		"\u00f5\u00f9\7\62\2\2\u00f6\u00f8\t\7\2\2\u00f7\u00f6\3\2\2\2\u00f8\u00fb"+
-		"\3\2\2\2\u00f9\u00f7\3\2\2\2\u00f9\u00fa\3\2\2\2\u00faT\3\2\2\2\u00fb"+
-		"\u00f9\3\2\2\2\u00fc\u00fd\7\62\2\2\u00fd\u00ff\t\b\2\2\u00fe\u0100\t"+
-		"\t\2\2\u00ff\u00fe\3\2\2\2\u0100\u0101\3\2\2\2\u0101\u00ff\3\2\2\2\u0101"+
-		"\u0102\3\2\2\2\u0102V\3\2\2\2\u0103\u0104\5Q)\2\u0104\u0106\7\60\2\2\u0105"+
-		"\u0107\t\6\2\2\u0106\u0105\3\2\2\2\u0107\u0108\3\2\2\2\u0108\u0106\3\2"+
+		"\u00e4N\3\2\2\2\u00e5\u00e6\5S*\2\u00e6\u00e8\7\60\2\2\u00e7\u00e9\t\5"+
+		"\2\2\u00e8\u00e7\3\2\2\2\u00e9\u00ea\3\2\2\2\u00ea\u00e8\3\2\2\2\u00ea"+
+		"\u00eb\3\2\2\2\u00ebP\3\2\2\2\u00ec\u00f1\5S*\2\u00ed\u00f1\5U+\2\u00ee"+
+		"\u00f1\5W,\2\u00ef\u00f1\5O(\2\u00f0\u00ec\3\2\2\2\u00f0\u00ed\3\2\2\2"+
+		"\u00f0\u00ee\3\2\2\2\u00f0\u00ef\3\2\2\2\u00f1R\3\2\2\2\u00f2\u00fb\7"+
+		"\62\2\2\u00f3\u00f7\t\6\2\2\u00f4\u00f6\t\5\2\2\u00f5\u00f4\3\2\2\2\u00f6"+
+		"\u00f9\3\2\2\2\u00f7\u00f5\3\2\2\2\u00f7\u00f8\3\2\2\2\u00f8\u00fb\3\2"+
+		"\2\2\u00f9\u00f7\3\2\2\2\u00fa\u00f2\3\2\2\2\u00fa\u00f3\3\2\2\2\u00fb"+
+		"T\3\2\2\2\u00fc\u0100\7\62\2\2\u00fd\u00ff\t\7\2\2\u00fe\u00fd\3\2\2\2"+
+		"\u00ff\u0102\3\2\2\2\u0100\u00fe\3\2\2\2\u0100\u0101\3\2\2\2\u0101V\3"+
+		"\2\2\2\u0102\u0100\3\2\2\2\u0103\u0104\7\62\2\2\u0104\u0106\t\b\2\2\u0105"+
+		"\u0107\t\t\2\2\u0106\u0105\3\2\2\2\u0107\u0108\3\2\2\2\u0108\u0106\3\2"+
 		"\2\2\u0108\u0109\3\2\2\2\u0109X\3\2\2\2\u010a\u010c\t\n\2\2\u010b\u010a"+
 		"\3\2\2\2\u010c\u010d\3\2\2\2\u010d\u010b\3\2\2\2\u010d\u010e\3\2\2\2\u010e"+
 		"\u010f\3\2\2\2\u010f\u0110\b-\2\2\u0110Z\3\2\2\2\r\2\u00cc\u00ce\u00e1"+
-		"\u00e9\u00f0\u00f3\u00f9\u0101\u0108\u010d\3\2\3\2";
+		"\u00ea\u00f0\u00f7\u00fa\u0100\u0108\u010d\3\2\3\2";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -45,6 +45,7 @@ for_condition: expr ';' expr ';' expr
        | expr ';' expr ';';
 expr    :  LITERAL
    | '(' expr ')'
+   | FLOAT_IDENT
    | CHAR_SET
    | IDENT
    | IDENT '[' expr ']'
@@ -123,6 +124,7 @@ AlPHA_CHAR
    ;
 
 
+FLOAT_IDENT : DecimalConstant'.'[0-9]+ ;
 
 LITERAL:   DecimalConstant     |   OctalConstant     |   HexadecimalConstant    | FLOAT_IDENT ;
 
@@ -139,7 +141,6 @@ HexadecimalConstant
     :   '0' [xX] [0-9a-fA-F] +
     ;
 
-FLOAT_IDENT : DecimalConstant'.'[0-9]+ ;
 
 
 WS  :   (   ' '
