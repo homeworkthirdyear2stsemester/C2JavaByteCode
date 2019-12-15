@@ -672,6 +672,32 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         return expr;
     }
 
+    private String searchType(MiniCParser.ExprContext ctx) {
+        for (int index = 0; index < ctx.getChildCount(); index++) {
+            if (ctx.getChild(index).getText().equals("[")) {
+                return null;
+            } else if (ctx.IDENT() != null) {
+                Type type = this.symbolTable.getTypeFromID(ctx.IDENT().getText());
+                if (type == Type.INT || type == Type.INTARRAY) {
+                    return "i";
+                } else if (type == Type.DOUBLE || type == Type.DOUBLE_ARRAY) {
+                    return "d";
+                } else if (type == Type.FLOAT || type == Type.FLOAT_ARRAY) {
+                    return "f";
+                } else if (type == Type.CHAR || type == Type.CHARARRAY) {
+                    return "i";
+                } else {
+                    return null;
+                }
+            } else if (ctx.getChild(index) instanceof MiniCParser.ExprContext) {
+                String result = this.searchType((MiniCParser.ExprContext) ctx.getChild(index));
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
+    }
 
     private String handleBinExpr(MiniCParser.ExprContext ctx, String expr) {
         String l2 = symbolTable.newLabel();
@@ -698,7 +724,15 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         SymbolTable.Type varType = this.symbolTable.getVarType(ctx.expr(0).getText());
 
         // 알맞는 타입으로 매칭
-        String type = BytecodeGenListenerHelper.getType(varType.name()).toLowerCase();
+        String type = "";
+        try {
+            type = BytecodeGenListenerHelper.getType(varType.name()).toLowerCase();
+        } catch (Exception e) {
+            type = this.searchType(ctx);
+            if (type == null) {
+                type = "";
+            }
+        }
 
         switch (ctx.getChild(1).getText()) {
             case "*":
