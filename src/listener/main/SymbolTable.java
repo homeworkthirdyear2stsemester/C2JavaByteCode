@@ -279,6 +279,7 @@ public class SymbolTable {
                     break;
                 case CHAR:
                     rtype = "C";
+                    break;
                 case INTARRAY:
                     rtype = "[I";
                     break;
