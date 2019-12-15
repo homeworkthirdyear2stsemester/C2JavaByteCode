@@ -1,4 +1,4 @@
-// Generated from /Users/jongun/cnu/IntelliJ_Project/C2JavaByteCode/src/MiniC.g4 by ANTLR 4.7.2
+// Generated from D:/ProgramFiles/IntelliJ/Programs/homework/compiler/lab5_3_final/src\MiniC.g4 by ANTLR 4.7.2
  
 package generated;
 
@@ -23,7 +23,7 @@ public class MiniCParser extends Parser {
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, VOID=20, INT=21, CHAR=22, DOUBLE=23, FLOAT=24, WHILE=25, 
 		IF=26, ELSE=27, RETURN=28, FOR=29, OR=30, AND=31, LE=32, GE=33, EQ=34, 
-		NE=35, IDENT=36, CHAR_SET=37, AlPHA_CHAR=38, FLOAT_IDENT=39, LITERAL=40, 
+		NE=35, IDENT=36, CHAR_SET=37, AlPHA_CHAR=38, LITERAL=39, FLOAT_IDENT=40, 
 		DecimalConstant=41, OctalConstant=42, HexadecimalConstant=43, WS=44;
 	public static final int
 		RULE_program = 0, RULE_decl = 1, RULE_var_decl = 2, RULE_type_spec = 3, 
@@ -55,8 +55,8 @@ public class MiniCParser extends Parser {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, "VOID", "INT", "CHAR", 
 			"DOUBLE", "FLOAT", "WHILE", "IF", "ELSE", "RETURN", "FOR", "OR", "AND", 
-			"LE", "GE", "EQ", "NE", "IDENT", "CHAR_SET", "AlPHA_CHAR", "FLOAT_IDENT", 
-			"LITERAL", "DecimalConstant", "OctalConstant", "HexadecimalConstant", 
+			"LE", "GE", "EQ", "NE", "IDENT", "CHAR_SET", "AlPHA_CHAR", "LITERAL", 
+			"FLOAT_IDENT", "DecimalConstant", "OctalConstant", "HexadecimalConstant", 
 			"WS"
 		};
 	}
@@ -613,8 +613,8 @@ public class MiniCParser extends Parser {
 			case T__18:
 			case IDENT:
 			case CHAR_SET:
-			case FLOAT_IDENT:
 			case LITERAL:
+			case FLOAT_IDENT:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(101);
@@ -816,7 +816,7 @@ public class MiniCParser extends Parser {
 			setState(128);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__4) | (1L << T__7) | (1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__18) | (1L << WHILE) | (1L << IF) | (1L << RETURN) | (1L << FOR) | (1L << IDENT) | (1L << CHAR_SET) | (1L << FLOAT_IDENT) | (1L << LITERAL))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__4) | (1L << T__7) | (1L << T__9) | (1L << T__10) | (1L << T__11) | (1L << T__12) | (1L << T__18) | (1L << WHILE) | (1L << IF) | (1L << RETURN) | (1L << FOR) | (1L << IDENT) | (1L << CHAR_SET) | (1L << LITERAL) | (1L << FLOAT_IDENT))) != 0)) {
 				{
 				{
 				setState(125);
@@ -1626,8 +1626,8 @@ public class MiniCParser extends Parser {
 			case T__18:
 			case IDENT:
 			case CHAR_SET:
-			case FLOAT_IDENT:
 			case LITERAL:
+			case FLOAT_IDENT:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(295);
@@ -1740,8 +1740,8 @@ public class MiniCParser extends Parser {
 		"\3\2\2\2)\'\3\2\2\2)*\3\2\2\2*\3\3\2\2\2+.\5\6\4\2,.\5\n\6\2-+\3\2\2\2"+
 		"-,\3\2\2\2.\5\3\2\2\2/\60\5\b\5\2\60\61\7&\2\2\61\62\7\3\2\2\62G\3\2\2"+
 		"\2\63\64\5\b\5\2\64\65\7&\2\2\65\66\7\4\2\2\66\67\7\'\2\2\678\7\3\2\2"+
-		"8G\3\2\2\29:\5\b\5\2:;\7&\2\2;<\7\4\2\2<=\7*\2\2=>\7\3\2\2>G\3\2\2\2?"+
-		"@\5\b\5\2@A\7&\2\2AB\7\5\2\2BC\7*\2\2CD\7\6\2\2DE\7\3\2\2EG\3\2\2\2F/"+
+		"8G\3\2\2\29:\5\b\5\2:;\7&\2\2;<\7\4\2\2<=\7)\2\2=>\7\3\2\2>G\3\2\2\2?"+
+		"@\5\b\5\2@A\7&\2\2AB\7\5\2\2BC\7)\2\2CD\7\6\2\2DE\7\3\2\2EG\3\2\2\2F/"+
 		"\3\2\2\2F\63\3\2\2\2F9\3\2\2\2F?\3\2\2\2G\7\3\2\2\2HI\t\2\2\2I\t\3\2\2"+
 		"\2JK\5\b\5\2KL\7&\2\2LM\7\7\2\2MN\5\f\7\2NO\7\b\2\2OP\5\26\f\2P\13\3\2"+
 		"\2\2QV\5\16\b\2RS\7\t\2\2SU\5\16\b\2TR\3\2\2\2UX\3\2\2\2VT\3\2\2\2VW\3"+
@@ -1758,9 +1758,9 @@ public class MiniCParser extends Parser {
 		"\2\u0087\u0088\5\b\5\2\u0088\u0089\7&\2\2\u0089\u008a\7\3\2\2\u008a\u009f"+
 		"\3\2\2\2\u008b\u008c\5\b\5\2\u008c\u008d\7&\2\2\u008d\u008e\7\4\2\2\u008e"+
 		"\u008f\7\'\2\2\u008f\u0090\7\3\2\2\u0090\u009f\3\2\2\2\u0091\u0092\5\b"+
-		"\5\2\u0092\u0093\7&\2\2\u0093\u0094\7\4\2\2\u0094\u0095\7*\2\2\u0095\u0096"+
+		"\5\2\u0092\u0093\7&\2\2\u0093\u0094\7\4\2\2\u0094\u0095\7)\2\2\u0095\u0096"+
 		"\7\3\2\2\u0096\u009f\3\2\2\2\u0097\u0098\5\b\5\2\u0098\u0099\7&\2\2\u0099"+
-		"\u009a\7\5\2\2\u009a\u009b\7*\2\2\u009b\u009c\7\6\2\2\u009c\u009d\7\3"+
+		"\u009a\7\5\2\2\u009a\u009b\7)\2\2\u009b\u009c\7\6\2\2\u009c\u009d\7\3"+
 		"\2\2\u009d\u009f\3\2\2\2\u009e\u0087\3\2\2\2\u009e\u008b\3\2\2\2\u009e"+
 		"\u0091\3\2\2\2\u009e\u0097\3\2\2\2\u009f\31\3\2\2\2\u00a0\u00a1\7\34\2"+
 		"\2\u00a1\u00a2\7\7\2\2\u00a2\u00a3\5\"\22\2\u00a3\u00a4\7\b\2\2\u00a4"+
@@ -1779,8 +1779,8 @@ public class MiniCParser extends Parser {
 		"\3\2\2\2\u00cd\u00ce\5\"\22\2\u00ce\u00cf\7\3\2\2\u00cf\u00d0\5\"\22\2"+
 		"\u00d0\u00d1\7\3\2\2\u00d1\u00d3\3\2\2\2\u00d2\u00be\3\2\2\2\u00d2\u00c4"+
 		"\3\2\2\2\u00d2\u00c9\3\2\2\2\u00d2\u00cd\3\2\2\2\u00d3!\3\2\2\2\u00d4"+
-		"\u00d5\b\22\1\2\u00d5\u00fc\7*\2\2\u00d6\u00d7\7\7\2\2\u00d7\u00d8\5\""+
-		"\22\2\u00d8\u00d9\7\b\2\2\u00d9\u00fc\3\2\2\2\u00da\u00fc\7)\2\2\u00db"+
+		"\u00d5\b\22\1\2\u00d5\u00fc\7)\2\2\u00d6\u00d7\7\7\2\2\u00d7\u00d8\5\""+
+		"\22\2\u00d8\u00d9\7\b\2\2\u00d9\u00fc\3\2\2\2\u00da\u00fc\7*\2\2\u00db"+
 		"\u00fc\7\'\2\2\u00dc\u00fc\7&\2\2\u00dd\u00de\7&\2\2\u00de\u00df\7\5\2"+
 		"\2\u00df\u00e0\5\"\22\2\u00e0\u00e1\7\6\2\2\u00e1\u00fc\3\2\2\2\u00e2"+
 		"\u00e3\7&\2\2\u00e3\u00e4\7\7\2\2\u00e4\u00e5\5$\23\2\u00e5\u00e6\7\b"+
