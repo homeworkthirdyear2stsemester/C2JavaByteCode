@@ -256,18 +256,18 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
     public void exitLocal_decl(MiniCParser.Local_declContext ctx) {
         String varDecl = "";
         if (isDeclWithInit(ctx)) {
-
             String store="istore_";
-            if(symbolTable.getVarType(ctx.IDENT().getText()).name().equals("DOUBLE"))
+            String loadConstant="ldc ";
+            if(symbolTable.getVarType(ctx.IDENT().getText()).name().equals("DOUBLE")){
                 store="dstore_";
+                loadConstant="ldc2_w ";
+            }
             else if(symbolTable.getVarType(ctx.IDENT().getText()).name().equals("INT")|symbolTable.getVarType(ctx.IDENT().getText()).name().equals("CHAR"))
                 store="istore_";
             else if(symbolTable.getVarType(ctx.IDENT().getText()).name().equals("FLOAT"))
                 store="fstore_";
-
-
             String vId = symbolTable.getVarId(ctx);
-            varDecl += makeTabs() + "ldc " + ctx.LITERAL().getText() + "\n"
+            varDecl += makeTabs() + loadConstant + ctx.LITERAL().getText() + "\n"
                     + makeTabs() + store + vId + "\n";
         } else if (isDeclWithArray(ctx)) {
             String vId = symbolTable.getVarId(ctx);
@@ -449,6 +449,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                 String doubleStr = ctx.FLOAT_IDENT().getText();
                 expr += makeTabs() + "ldc " + doubleStr + " \n";
                 // todo double
+
 
             }
         } else if (ctx.getChildCount() == 2) { // UnaryOperation

@@ -143,6 +143,8 @@ public class BytecodeGenListenerHelper {
         int stackSize=0;
         String[] sp=stmt.split("\t|\n");
         for(int i=0; i<sp.length; i++){
+            if(sp[i].contains("ldc2_w"))
+                stackSize++;
             if(sp[i].contains("load")|sp[i].contains("const")|sp[i].contains("dup")
                     |sp[i].contains("invoke")|sp[i].contains("jsr")|sp[i].contains("ldc")|sp[i].contains("push")){
                 stackSize++;
@@ -162,8 +164,12 @@ public class BytecodeGenListenerHelper {
         localVarSize+=params;
         ArrayList compoundStmt= (ArrayList) ctx.compound_stmt().children;
         for(int i=0; i<compoundStmt.size(); i++){
-            if(compoundStmt.get(i) instanceof Local_declContext)
+            if(compoundStmt.get(i) instanceof Local_declContext){
                 localVarSize++;
+                if(((Local_declContext) compoundStmt.get(i)).type_spec().getText().equals("double"))
+                    localVarSize++;
+            }
+
         }
         return localVarSize+"";
     }
