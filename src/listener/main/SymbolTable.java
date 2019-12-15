@@ -74,6 +74,11 @@ public class SymbolTable {
 
     void putGlobalVar(String varname, Type type) {
         // 초기값 없는 전역 변수
+
+        // 전역변수는 load 0 을 사용하기 때문에
+        // 지역변수가 0 번째 id를 사용하는 것을 막는다.
+        _labelID = _labelID == 0 ? 1 : _labelID;
+
         VarInfo vInfo = new VarInfo(type, _globalVarID++);
         _gsymtable.put(varname, vInfo);
     }
@@ -258,9 +263,36 @@ public class SymbolTable {
         if (lvar != null) {
             return lvar.id + "";
         }
+
         VarInfo gvar = _gsymtable.get(name);
         if (gvar != null) {
-            return gvar.id + "";
+            String rtype= "";
+            switch (gvar.type) {
+                case INT:
+                    rtype = "I";
+                    break;
+                case DOUBLE:
+                    rtype = "D";
+                    break;
+                case FLOAT:
+                    rtype = "F";
+                    break;
+                case CHAR:
+                    rtype = "C";
+                case INTARRAY:
+                    rtype = "[I";
+                    break;
+                case DOUBLE_ARRAY:
+                    rtype = "[D";
+                    break;
+                case FLOAT_ARRAY:
+                    rtype = "[F";
+                    break;
+                case CHARARRAY:
+                    rtype = "[C";
+                    break;
+            }
+            return "Test/" + name + " "  + rtype + '\n';
         }
         return null;
     }
