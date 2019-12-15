@@ -80,14 +80,19 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                 symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.CHAR, initVal(ctx));
             else if (typeName.equals("int"))
                 symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.INT, initVal(ctx));
+            else if(typeName.equals("double"))
+                symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.DOUBLE, initVal(ctx));
+            else if(typeName.equals("float"))
+                symbolTable.putLocalVarWithInitVal(getLocalVarName(ctx), Type.FLOAT, initVal(ctx));
         } else { // simple decl
             if (typeName.equals("char"))
                 symbolTable.putLocalVar(getLocalVarName(ctx), Type.CHAR);
             else if (typeName.equals("int"))
                 symbolTable.putLocalVar(getLocalVarName(ctx), Type.INT);
-            else if(typeName.equals("double")){
+            else if(typeName.equals("double"))
                 symbolTable.putLocalVar(getLocalVarName(ctx), Type.DOUBLE);
-            }
+            else if(typeName.equals("float"))
+                symbolTable.putLocalVar(getLocalVarName(ctx), Type.FLOAT);
         }
     }
 
@@ -391,7 +396,6 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             if (ctx.IDENT() != null) {
                 String idName = ctx.IDENT().getText();
                 if (symbolTable.getVarType(idName) == Type.INT || symbolTable.getVarType(idName) == Type.CHAR) {
-
                     // 글로벌 변수일 경우
                     String inGlobal = symbolTable.getVarId(idName);
                     if(inGlobal != null && inGlobal.charAt(0) == className){
@@ -410,6 +414,12 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                 String charStr = ctx.CHAR_SET().getText();
                 int char2int = charStr.charAt(1);
                 expr += makeTabs() + "bipush " + char2int + " \n";
+            } else if (ctx.FLOAT_IDENT() != null) {
+                // double
+                String doubleStr = ctx.FLOAT_IDENT().getText();
+                expr += makeTabs() + "ldc " + doubleStr + " \n";
+                // todo float
+
             }
         } else if (ctx.getChildCount() == 2) { // UnaryOperation
 //			expr = handleUnaryExpr(ctx, newTexts.get(ctx) + expr);
@@ -679,6 +689,10 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             String arg = ctx.args().expr(0).getText();
             if (symbolTable.getVarType(arg) == Type.CHAR) {
                 arg = "(C)";
+            } else if (symbolTable.getVarType(arg) == Type.DOUBLE) {
+                arg = "(D)";
+            } else if (symbolTable.getVarType(arg) == Type.FLOAT) {
+                arg = "(D)";
             } else {
                 arg = "(I)";
             }
