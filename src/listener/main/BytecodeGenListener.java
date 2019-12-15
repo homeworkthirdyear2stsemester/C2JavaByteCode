@@ -344,8 +344,9 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         if (isIntReturn(ctx)) {
             // 리턴할 값 로드
             stmt = newTexts.get(ctx.expr());
-            // ireturn
-            stmt += makeTabs() + "i" + ctx.RETURN().getText() + "\n";
+            String functionName = symbolTable.getFunSpecStr(ctx.getParent().getParent().getParent().getChild(1).getText());
+            String type = functionName.substring(functionName.length() - 1);
+            stmt += makeTabs() + type.toLowerCase() + ctx.RETURN().getText() + "\n";
         }
 
         newTexts.put(ctx, stmt);
@@ -621,15 +622,14 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         String id = ctx.expr(0).getText();
         expr += newTexts.get(ctx.expr(0));
         String inGlobal = "";
-        String type="i";
-        String loadOne="ldc 1";
-        if(symbolTable.getVarType(id).name().equals("FLOAT")) {
+        String type = "i";
+        String loadOne = "ldc 1";
+        if (symbolTable.getVarType(id).name().equals("FLOAT")) {
             type = "f";
             loadOne = "fconst_1";
-        }
-        else if(symbolTable.getVarType(id).name().equals("DOUBLE")){
-            type="d";
-            loadOne="dconst_1";
+        } else if (symbolTable.getVarType(id).name().equals("DOUBLE")) {
+            type = "d";
+            loadOne = "dconst_1";
         }
 
         switch (ctx.getChild(0).getText()) {
@@ -679,26 +679,26 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         String tabs = makeTabs();
         expr += newTexts.get(ctx.expr(0));
         expr += newTexts.get(ctx.expr(1));
-        String type="i";
+        String type = "i";
 
         switch (ctx.getChild(1).getText()) {
             case "*":
-                expr += tabs + type+ "mul \n";
+                expr += tabs + type + "mul \n";
                 break;
             case "/":
-                expr += tabs + type+ "div \n";
+                expr += tabs + type + "div \n";
                 break;
             case "%":
-                expr += tabs + type+ "rem \n";
+                expr += tabs + type + "rem \n";
                 break;
             case "+":        // expr(0) expr(1) iadd
-                expr += tabs + type+ "add \n";
+                expr += tabs + type + "add \n";
                 break;
             case "-":
-                expr += tabs + type+ "sub \n";
+                expr += tabs + type + "sub \n";
                 break;
             case "==":
-                expr += tabs + type+ "sub " + "\n"
+                expr += tabs + type + "sub " + "\n"
                         + tabs + "ifeq" + l2 + "\n"
                         + tabs + "ldc 0" + "\n"
                         + tabs + "goto " + lend + "\n"
@@ -707,7 +707,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                         + tabs + lend + ": " + "\n";
                 break;
             case "!=":
-                expr += tabs + type+ "sub " + "\n"
+                expr += tabs + type + "sub " + "\n"
                         + tabs + "ifne " + l2 + "\n"
                         + tabs + "ldc 0" + "\n"
                         + tabs + "goto " + lend + "\n"
@@ -718,7 +718,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             case "<=":
                 // 두 값을 빼서 오른쪽에 있던 값을 왼쪽으로 이항하는 동작을 함. 그 뒤 결과를 ifle로 확인하여
                 // true/false에 맞게 분기
-                expr += tabs +  type+ "sub " + "\n"
+                expr += tabs + type + "sub " + "\n"
                         + tabs + "ifle " + l2 + "\n"
                         + tabs + "ldc 0" + "\n"
                         + tabs + "goto " + lend + "\n"
@@ -729,7 +729,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             case "<":
                 // 두 값을 빼서 오른쪽에 있던 값을 왼쪽으로 이항하는 동작을 함. 그 뒤 결과를 iflt로 확인하여
                 // true/false에 맞게 분기
-                expr += tabs + type+ "sub " + "\n"
+                expr += tabs + type + "sub " + "\n"
                         + tabs + "iflt " + l2 + "\n"
                         + tabs + "ldc 0" + "\n"
                         + tabs + "goto " + lend + "\n"
@@ -740,7 +740,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             case ">=":
                 // 두 값을 빼서 오른쪽에 있던 값을 왼쪽으로 이항하는 동작을 함. 그 뒤 결과를 ifge로 확인하여
                 // true/false에 맞게 분기
-                expr += tabs + type+ "sub " + "\n"
+                expr += tabs + type + "sub " + "\n"
                         + tabs + "ifge " + l2 + "\n"
                         + tabs + "ldc 0" + "\n"
                         + tabs + "goto " + lend + "\n"
@@ -751,7 +751,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             case ">":
                 // 두 값을 빼서 오른쪽에 있던 값을 왼쪽으로 이항하는 동작을 함. 그 뒤 결과를 ifgt로 확인하여
                 // true/false에 맞게 분기
-                expr += tabs + type+ "sub " + "\n"
+                expr += tabs + type + "sub " + "\n"
                         + tabs + "ifgt " + l2 + "\n"
                         + tabs + "ldc 0" + "\n"
                         + tabs + "goto " + lend + "\n"
@@ -784,7 +784,12 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 
             String arg = ctx.args().expr(0).getText();
             if (argsData.getChildCount() >= 4) {
-                arg = argsData.getChild(0).getText();
+                if (argsData.getChild(1).getText().equals("(")) {
+                    String typeOfFunction = symbolTable.getFunSpecStr(argsData.getChild(0).getText());
+                    arg = "(" + typeOfFunction.substring(typeOfFunction.length() - 1) + ")";
+                } else if (argsData.getChild(1).getText().equals("[")) {
+                    arg = argsData.getChild(0).getText();
+                }
             }
             Type nowType = symbolTable.getVarType(arg);
             if (nowType == Type.CHAR || nowType == Type.CHARARRAY) {
