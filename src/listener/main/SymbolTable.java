@@ -257,6 +257,20 @@ public class SymbolTable {
         return res;
     }
 
+    Type getTypeFromID(String name) {
+        VarInfo lvar = _lsymtable.get(name);
+        if (lvar != null) {
+            return lvar.type;
+        }
+
+        VarInfo gvar = _gsymtable.get(name);
+        if (gvar != null) {
+            return gvar.type;
+        }
+
+        return null;
+    }
+
     String getVarId(String name) {
         // 지역변수인지 전역변수인지 확인하여 알맞게 반환
         VarInfo lvar = _lsymtable.get(name);
@@ -266,7 +280,7 @@ public class SymbolTable {
 
         VarInfo gvar = _gsymtable.get(name);
         if (gvar != null) {
-            String rtype= "";
+            String rtype = "";
             switch (gvar.type) {
                 case INT:
                     rtype = "I";
@@ -293,7 +307,7 @@ public class SymbolTable {
                     rtype = "[C";
                     break;
             }
-            return "Test/" + name + " "  + rtype + '\n';
+            return "Test/" + name + " " + rtype + '\n';
         }
         return null;
     }
