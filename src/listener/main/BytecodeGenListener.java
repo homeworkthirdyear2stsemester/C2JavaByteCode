@@ -621,32 +621,43 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         String id = ctx.expr(0).getText();
         expr += newTexts.get(ctx.expr(0));
         String inGlobal = "";
+        String type="i";
+        String loadOne="ldc 1";
+        if(symbolTable.getVarType(id).name().equals("FLOAT")) {
+            type = "f";
+            loadOne = "fconst_1";
+        }
+        else if(symbolTable.getVarType(id).name().equals("DOUBLE")){
+            type="d";
+            loadOne="dconst_1";
+        }
+
         switch (ctx.getChild(0).getText()) {
             // String id2 = ctx.expr(1).getText();
             ////				expr += makeTabs()+"iload_" + symbolTable.getVarId(id1) + "\n"+
             case "-":
-                expr += tabs + "ineg \n";
+                expr += tabs + type + "neg \n";
                 break;
             case "--":
-                expr += tabs + "ldc 1" + "\n"
-                        + tabs + "isub" + "\n";
+                expr += tabs + loadOne + "\n"
+                        + tabs + type + "sub" + "\n";
                 // 글로벌인지 확인
                 inGlobal = symbolTable.getVarId(id);
                 if (inGlobal != null && inGlobal.charAt(0) == className) {
-                    expr += tabs + "putstatic " + symbolTable.getVarId(id) + "\n"; // bug fix, 연산 값 다시 저장 필요함
+                    expr += tabs + "putstatic " + symbolTable.getVarId(id) + "\n";
                 } else {
-                    expr += tabs + "istore_" + symbolTable.getVarId(id) + "\n"; // bug fix, 연산 값 다시 저장 필요함
+                    expr += tabs + type + "store_" + symbolTable.getVarId(id) + "\n";
                 }
                 break;
             case "++":
-                expr += tabs + "ldc 1" + "\n"
-                        + tabs + "iadd" + "\n";
+                expr += tabs + loadOne + "\n"
+                        + tabs + type + "add" + "\n";
                 // 글로벌인지 확인
                 inGlobal = symbolTable.getVarId(id);
                 if (inGlobal != null && inGlobal.charAt(0) == className) {
-                    expr += tabs + "putstatic " + symbolTable.getVarId(id) + "\n"; // bug fix, 연산 값 다시 저장 필요함
+                    expr += tabs + "putstatic " + symbolTable.getVarId(id) + "\n";
                 } else {
-                    expr += tabs + "istore_" + symbolTable.getVarId(id) + "\n"; // bug fix, 연산 값 다시 저장 필요함
+                    expr += tabs + type + "store_" + symbolTable.getVarId(id) + "\n";
                 }
                 break;
             case "!":
@@ -668,25 +679,26 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         String tabs = makeTabs();
         expr += newTexts.get(ctx.expr(0));
         expr += newTexts.get(ctx.expr(1));
+        String type="i";
 
         switch (ctx.getChild(1).getText()) {
             case "*":
-                expr += tabs + "imul \n";
+                expr += tabs + type+ "mul \n";
                 break;
             case "/":
-                expr += tabs + "idiv \n";
+                expr += tabs + type+ "div \n";
                 break;
             case "%":
-                expr += tabs + "irem \n";
+                expr += tabs + type+ "rem \n";
                 break;
             case "+":        // expr(0) expr(1) iadd
-                expr += tabs + "iadd \n";
+                expr += tabs + type+ "add \n";
                 break;
             case "-":
-                expr += tabs + "isub \n";
+                expr += tabs + type+ "sub \n";
                 break;
             case "==":
-                expr += tabs + "isub " + "\n"
+                expr += tabs + type+ "sub " + "\n"
                         + tabs + "ifeq" + l2 + "\n"
                         + tabs + "ldc 0" + "\n"
                         + tabs + "goto " + lend + "\n"
@@ -695,7 +707,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                         + tabs + lend + ": " + "\n";
                 break;
             case "!=":
-                expr += tabs + "isub " + "\n"
+                expr += tabs + type+ "sub " + "\n"
                         + tabs + "ifne " + l2 + "\n"
                         + tabs + "ldc 0" + "\n"
                         + tabs + "goto " + lend + "\n"
@@ -706,7 +718,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             case "<=":
                 // 두 값을 빼서 오른쪽에 있던 값을 왼쪽으로 이항하는 동작을 함. 그 뒤 결과를 ifle로 확인하여
                 // true/false에 맞게 분기
-                expr += tabs + "isub " + "\n"
+                expr += tabs +  type+ "sub " + "\n"
                         + tabs + "ifle " + l2 + "\n"
                         + tabs + "ldc 0" + "\n"
                         + tabs + "goto " + lend + "\n"
@@ -717,7 +729,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             case "<":
                 // 두 값을 빼서 오른쪽에 있던 값을 왼쪽으로 이항하는 동작을 함. 그 뒤 결과를 iflt로 확인하여
                 // true/false에 맞게 분기
-                expr += tabs + "isub " + "\n"
+                expr += tabs + type+ "sub " + "\n"
                         + tabs + "iflt " + l2 + "\n"
                         + tabs + "ldc 0" + "\n"
                         + tabs + "goto " + lend + "\n"
@@ -728,7 +740,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             case ">=":
                 // 두 값을 빼서 오른쪽에 있던 값을 왼쪽으로 이항하는 동작을 함. 그 뒤 결과를 ifge로 확인하여
                 // true/false에 맞게 분기
-                expr += tabs + "isub " + "\n"
+                expr += tabs + type+ "sub " + "\n"
                         + tabs + "ifge " + l2 + "\n"
                         + tabs + "ldc 0" + "\n"
                         + tabs + "goto " + lend + "\n"
@@ -739,7 +751,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             case ">":
                 // 두 값을 빼서 오른쪽에 있던 값을 왼쪽으로 이항하는 동작을 함. 그 뒤 결과를 ifgt로 확인하여
                 // true/false에 맞게 분기
-                expr += tabs + "isub " + "\n"
+                expr += tabs + type+ "sub " + "\n"
                         + tabs + "ifgt " + l2 + "\n"
                         + tabs + "ldc 0" + "\n"
                         + tabs + "goto " + lend + "\n"
@@ -769,6 +781,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         String fname = getFunName(ctx);
         if (fname.equals("_print")) { // System.out.println
             MiniCParser.ExprContext argsData = ctx.args().expr(0);
+
             String arg = ctx.args().expr(0).getText();
             if (argsData.getChildCount() >= 4) {
                 arg = argsData.getChild(0).getText();
