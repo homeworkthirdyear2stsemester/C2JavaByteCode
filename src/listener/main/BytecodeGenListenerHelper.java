@@ -35,6 +35,7 @@ public class BytecodeGenListenerHelper {
     }
 
     static String getType(String type){
+        type = type.toLowerCase();
         switch (type) {
             case "int":
                 return "I";
