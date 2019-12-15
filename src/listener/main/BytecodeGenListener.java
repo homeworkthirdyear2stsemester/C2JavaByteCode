@@ -677,9 +677,28 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         String l2 = symbolTable.newLabel();
         String lend = symbolTable.newLabel();
         String tabs = makeTabs();
-        expr += newTexts.get(ctx.expr(0));
-        expr += newTexts.get(ctx.expr(1));
-        String type = "i";
+        String globalTexts = "";
+
+        // 글로벌일 경우 load 2번하면 add가 안되기 때문에 이를 해결
+        String inGlobal = this.symbolTable.getVarId(ctx.expr(0).getText());
+        if (inGlobal != null && inGlobal.charAt(0) == this.className) {
+            globalTexts = globalTexts + "    aload 0\n";
+            globalTexts = globalTexts + "    getstatic " + inGlobal;
+        } else {
+            expr += this.newTexts.get(ctx.expr(0));
+        }
+        inGlobal = this.symbolTable.getVarId(ctx.expr(1).getText());
+        if (inGlobal != null && inGlobal.charAt(0) == this.className) {
+            globalTexts = globalTexts + "    getstatic " + inGlobal;
+        } else {
+            expr += this.newTexts.get(ctx.expr(1));
+        }
+
+        expr = expr + globalTexts;
+        SymbolTable.Type varType = this.symbolTable.getVarType(ctx.expr(0).getText());
+
+        // 알맞는 타입으로 매칭
+        String type = BytecodeGenListenerHelper.getType(varType.name()).toLowerCase();
 
         switch (ctx.getChild(1).getText()) {
             case "*":
