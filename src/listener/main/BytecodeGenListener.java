@@ -85,6 +85,9 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                 symbolTable.putLocalVar(getLocalVarName(ctx), Type.CHAR);
             else if (typeName.equals("int"))
                 symbolTable.putLocalVar(getLocalVarName(ctx), Type.INT);
+            else if(typeName.equals("double")){
+                symbolTable.putLocalVar(getLocalVarName(ctx), Type.DOUBLE);
+            }
         }
     }
 
@@ -390,7 +393,8 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                 if (symbolTable.getVarType(idName) == Type.INT || symbolTable.getVarType(idName) == Type.CHAR) {
 
                     // 글로벌 변수일 경우
-                    if(symbolTable.getVarId(idName).charAt(0) == className){
+                    String inGlobal = symbolTable.getVarId(idName);
+                    if(inGlobal != null && inGlobal.charAt(0) == className){
                         expr += makeTabs() + "aload 0 \n"
                                 + makeTabs() + "getstatic " + symbolTable.getVarId(idName);
                     }else{
@@ -416,7 +420,8 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                 expr = newTexts.get(ctx.expr(0));
             } else if (ctx.getChild(1).getText().equals("=")) {    // IDENT '=' expr
                 // 글로벌 변수일 경우
-                if(symbolTable.getVarId(ctx.IDENT().getText()).charAt(0) == className){
+                String inGlobal = symbolTable.getVarId(ctx.IDENT().getText());
+                if(inGlobal != null && inGlobal.charAt(0) == className){
                     expr = makeTabs() + "aload 0 \n"
                             + newTexts.get(ctx.expr(0))
                             + makeTabs() + "putstatic " + symbolTable.getVarId(ctx.IDENT().getText());
@@ -444,7 +449,8 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 
                 String loadVariable ="";
                 // 글로벌인지 확인한다.
-                if(symbolTable.getVarId(varName).charAt(0) == className){
+                String inGlobal = symbolTable.getVarId(varName);
+                if(inGlobal != null && inGlobal.charAt(0) == className){
                     loadVariable = tabs + "getstatic " + symbolTable.getVarId(varName);
                 }else{
                     String varId = symbolTable.getVarId(varName);
@@ -456,6 +462,10 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                     load = "iaload";
                 } else if (varType == Type.CHARARRAY) {
                     load = "caload";
+                } else if(varType == Type.DOUBLE_ARRAY){
+                    load = "daload";
+                } else if(varType == Type.FLOAT_ARRAY){
+                    load = "faload";
                 }
                 expr += loadVariable
                         + tabs + "bipush " + index + '\n'
@@ -471,7 +481,9 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 
                 String loadVariable ="";
                 // 글로벌인지 확인한다.
-                if(symbolTable.getVarId(varName).charAt(0) == className){
+
+                String inGlobal = symbolTable.getVarId(varName);
+                if(inGlobal != null && inGlobal.charAt(0) == className){
                     loadVariable = tabs + "getstatic " + symbolTable.getVarId(varName);
                 }else{
                     String varId = symbolTable.getVarId(varName);
@@ -489,7 +501,8 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
 
                 String loadVariable ="";
                 // 글로벌인지 확인한다.
-                if(symbolTable.getVarId(varName).charAt(0) == className){
+                String inGlobal = symbolTable.getVarId(varName);
+                if(inGlobal != null && inGlobal.charAt(0) == className){
                     loadVariable = tabs + "getstatic " + symbolTable.getVarId(varName);
                 }else{
                     String varId = symbolTable.getVarId(varName);
@@ -515,6 +528,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         String tabs = makeTabs();
         String id = ctx.expr(0).getText();
         expr += newTexts.get(ctx.expr(0));
+        String inGlobal = "";
         switch (ctx.getChild(0).getText()) {
             // String id2 = ctx.expr(1).getText();
             ////				expr += makeTabs()+"iload_" + symbolTable.getVarId(id1) + "\n"+
@@ -525,7 +539,8 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                 expr += tabs + "ldc 1" + "\n"
                         + tabs + "isub" + "\n";
                 // 글로벌인지 확인
-                if(symbolTable.getVarId(id).charAt(0) == className){
+                inGlobal = symbolTable.getVarId(id);
+                if(inGlobal != null && inGlobal.charAt(0) == className){
                     expr += tabs + "putstatic " + symbolTable.getVarId(id) + "\n"; // bug fix, 연산 값 다시 저장 필요함
                 }else{
                     expr += tabs + "istore_" + symbolTable.getVarId(id) + "\n"; // bug fix, 연산 값 다시 저장 필요함
@@ -535,7 +550,8 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                 expr += tabs + "ldc 1" + "\n"
                         + tabs + "iadd" + "\n";
                 // 글로벌인지 확인
-                if(symbolTable.getVarId(id).charAt(0) == className){
+                inGlobal = symbolTable.getVarId(id);
+                if(inGlobal != null && inGlobal.charAt(0) == className){
                     expr += tabs + "putstatic " + symbolTable.getVarId(id) + "\n"; // bug fix, 연산 값 다시 저장 필요함
                 }else{
                     expr += tabs + "istore_" + symbolTable.getVarId(id) + "\n"; // bug fix, 연산 값 다시 저장 필요함
