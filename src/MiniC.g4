@@ -124,9 +124,10 @@ AlPHA_CHAR
    ;
 
 
-FLOAT_IDENT : DecimalConstant'.'[0-9]+ ;
 
 LITERAL:   DecimalConstant     |   OctalConstant     |   HexadecimalConstant    | FLOAT_IDENT ;
+
+FLOAT_IDENT : DecimalConstant'.'[0-9]+ ;
 
 DecimalConstant
     :   '0'
