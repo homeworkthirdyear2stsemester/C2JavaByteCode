@@ -730,7 +730,7 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
         } catch (Exception e) {
             type = this.searchType(ctx);
             if (type == null) {
-                type = "";
+                type = "i";
             }
         }
 
@@ -836,9 +836,9 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
             MiniCParser.ExprContext argsData = ctx.args().expr(0);
 
             String arg = ctx.args().expr(0).getText();
-            if (argsData.getChildCount() >= 4) {
-                if (argsData.getChild(1).getText().equals("(")) {
-                    String typeOfFunction = symbolTable.getFunSpecStr(argsData.getChild(0).getText());
+            if (argsData.getChildCount() >= 4) { // 배열, 함수
+                if (argsData.getChild(1).getText().equals("(")) { // type funcname ( args )
+                    String typeOfFunction = symbolTable.getFunSpecStr(argsData.getChild(0).getText()); // add(II)I
                     arg = "(" + typeOfFunction.substring(typeOfFunction.length() - 1) + ")";
                 } else if (argsData.getChild(1).getText().equals("[")) {
                     arg = argsData.getChild(0).getText();
@@ -853,6 +853,20 @@ public class BytecodeGenListener extends MiniCBaseListener implements ParseTreeL
                 arg = "(F)";
             } else if (nowType == Type.INT || nowType == Type.INTARRAY) {
                 arg = "(I)";
+            } else {
+                try {
+                    Integer.parseInt(arg);
+                    arg = "(I)";
+                } catch (Exception e) {
+                    try {
+                        Double.parseDouble(arg);
+                        arg = "(D)";
+                    } catch (Exception exp) { // 'c'
+                        if (arg.length() == 3 && arg.charAt(0) == '\'' && arg.charAt(2) == '\'') {
+                            arg = "(C)";
+                        }
+                    }
+                }
             }
 
             expr = makeTabs() + "getstatic java/lang/System/out Ljava/io/PrintStream;" + "\n"
